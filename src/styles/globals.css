@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@import "./pixel-corners.css";
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    body {
+        @apply bg-background text-foreground font-ibm-plex;
+    }
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+@theme inline {
+    /* Typography */
+    --font-ibm-plex: var(--font-ibm-plex);
+    --font-chicago-kare: var(--font-chicago-kare);
+
+    /* Colors */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    /* Shadows */
+    --inset-shadow-header:
+        inset 1px 1px 0px var(--shadow-light),
+        inset -1px -1px 0px var(--shadow-dark);
+    --inset-shadow-button:
+        inset 1px 1px 0px var(--shadow-light),
+        inset 2px 1px 0px var(--shadow-light),
+        inset -1px -1px 0px var(--shadow-dark),
+        inset -2px -1px 0px var(--shadow-dark);
+    --inset-shadow-button-active:
+        inset -1px -1px 0px var(--shadow-light),
+        inset -2px -1px 0px var(--shadow-light),
+        inset 1px 1px 0px var(--shadow-dark),
+        inset 2px 1px 0px var(--shadow-dark);
+    --inset-shadow-button-wrapper:
+        inset 3px 3px 0px var(--shadow-light),
+        inset -3px -3px 0px var(--shadow-dark);
+}
+
+:root {
+    /* Background */
+    --background: oklch(0 0 0);
+    --foreground: oklch(1 0 0);
+
+    /* Primary */
+    --primary: oklch(0.6 0.1 290);
+    --primary-foreground: oklch(1 0 0);
+
+    /* Secondary */
+    --secondary: oklch(0.58 0.1 265);
+    --secondary-foreground: oklch(1 0 0);
+
+    /* Muted */
+    --muted: oklch(0.3 0.05 275);
+    --muted-foreground: oklch(0.75 0.03 275);
+
+    /* Accent */
+    --accent: oklch(0.7 0.06 280);
+    --accent-foreground: oklch(1 0 0);
+
+    --destructive: oklch(0.65 0.2 25);
+
+    /* Borders */
+    --border: oklch(1 0 0);
+    --input: oklch(1 0 0 / 20%);
+    --ring: oklch(0.7 0.1 290);
+
+    /* Shadows */
+    --shadow-light: rgba(255, 255, 255, 0.2);
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+}

@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { IBM_Plex_Mono } from "next/font/google";
+import { ReactNode } from "react";
 import localFont from "next/font/local";
-import "./globals.css";
+
+import "@/styles/globals.css";
 
 const ibmPlex = IBM_Plex_Mono({
   variable: "--font-ibm-plex",
@@ -33,12 +35,12 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html
       lang="en"
-      className={`${ibmPlex.variable} ${chicagoKare.variable} h-full antialiased`}
+      className={`h-full antialiased ${ibmPlex.variable} ${chicagoKare.variable}`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
