@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useRef, useState, PointerEvent, ReactNode } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useRef, PointerEvent, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./primitives/Button";
 import useDraggable from "@/hooks/useDraggable";
@@ -14,30 +15,43 @@ const TitleBarLines = ({ className }: { className?: string }) => (
 );
 
 const CloseButton = ({
-  onClick,
+  slug,
   className,
 }: {
-  onClick: () => void;
+  slug: string;
   className?: string;
-}) => (
-  <Button
-    aria-label="Close window"
-    onClick={onClick}
-    size="windowControl"
-    variant="secondary"
-    className={cn(
-      "leading-0 text-[10px] aspect-square font-chicago-kare",
-      className,
-    )}
-  >
-    <span className="ml-px">x</span>
-  </Button>
-);
+}) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const handleClose = useCallback(() => {
+    const newParams = new URLSearchParams(searchParams);
+
+    newParams.delete(slug);
+
+    router.replace(`/?${newParams.toString()}`, { scroll: false });
+  }, [searchParams, slug, router]);
+
+  return (
+    <Button
+      aria-label="Close window"
+      onClick={handleClose}
+      size="windowControl"
+      variant="secondary"
+      className={cn(
+        "leading-0 text-[10px] aspect-square font-chicago-kare",
+        className,
+      )}
+    >
+      <span className="ml-px">x</span>
+    </Button>
+  );
+};
 
 type WindowHeaderProps = {
   title: string;
   icon: ReactNode;
-  handleClose: () => void;
+  slug: string;
   handlePointerDown: (e: PointerEvent) => void;
   handlePointerMove: (e: PointerEvent) => void;
   handlePointerUp: (e: PointerEvent) => void;
@@ -46,7 +60,7 @@ type WindowHeaderProps = {
 const WindowHeader = ({
   title,
   icon,
-  handleClose,
+  slug,
   handlePointerDown,
   handlePointerMove,
   handlePointerUp,
@@ -71,15 +85,15 @@ const WindowHeader = ({
 
       <TitleBarLines className="pr-3" />
 
-      <CloseButton onClick={handleClose} />
+      <CloseButton slug={slug} />
     </div>
   );
 };
 
 type WindowProps = {
   title: string;
+  slug: string;
   children: ReactNode;
-  defaultOpen?: boolean;
   icon?: ReactNode;
   className?: string;
   defaultPosition?: { x: number; y: number };
@@ -87,15 +101,13 @@ type WindowProps = {
 
 const Window = ({
   title,
+  slug,
   children,
-  defaultOpen = true,
   icon,
   className,
   defaultPosition,
 }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
-
-  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const {
     isDragging,
@@ -107,12 +119,6 @@ const Window = ({
     targetRef: windowRef,
     defaultPosition,
   });
-
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-
-  if (!isOpen) return null;
 
   return (
     <div
@@ -132,13 +138,15 @@ const Window = ({
       <WindowHeader
         title={title}
         icon={icon}
-        handleClose={handleClose}
+        slug={slug}
         handlePointerDown={handlePointerDown}
         handlePointerMove={handlePointerMove}
         handlePointerUp={handlePointerUp}
       />
 
       {children}
+
+      <div className="h-5 inset-shadow-header border-t border-border" />
     </div>
   );
 };

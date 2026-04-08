@@ -5,26 +5,27 @@ import {
   InformationSource,
   PageCurl,
 } from "@/components/icons";
+import HeaderLink from "./HeaderLink";
 
 const HEADER_OPTIONS = [
   {
     label: "About me",
-    href: "#about",
+    slug: "about",
     icon: InformationSource,
   },
   {
     label: "Projects",
-    href: "#projects",
+    slug: "projects",
     icon: Code,
   },
   {
     label: "Contact",
-    href: "#contact",
+    slug: "contact",
     icon: SpeechBaloon,
   },
   {
     label: "Curriculum Vitae",
-    href: "#cv",
+    slug: "cv",
     icon: PageCurl,
   },
 ];
@@ -32,10 +33,10 @@ const HEADER_OPTIONS = [
 const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div {...props}>
-      {HEADER_OPTIONS.map(({ label, href, icon: Icon }) => (
-        <a
+      {HEADER_OPTIONS.map(({ label, slug, icon: Icon }) => (
+        <HeaderLink
           key={label}
-          href={href}
+          paramKey={slug}
           className="font-chicago-kare flex-1 not-first:border-l border-white flex justify-between items-center px-2 py-0.5 leading-5 text-xl inset-shadow-pixelated"
         >
           <span>
@@ -44,7 +45,7 @@ const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
           </span>
 
           <Icon size={16} strokeWidth={0.3} />
-        </a>
+        </HeaderLink>
       ))}
     </div>
   );
