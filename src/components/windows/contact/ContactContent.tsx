@@ -1,5 +1,5 @@
 import { Envelope, GitHub, Phone, Twitter } from "@/components/icons";
-import ContactOpenButton from "@/components/ContactOpenButton";
+import ContactOpenButton from "@/components/windows/contact/ContactOpenButton";
 
 const CONTACT_INFO = [
   {

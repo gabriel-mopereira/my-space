@@ -1,9 +1,10 @@
 import { InformationSource, SpeechBaloon } from "@/components/icons";
 import Background from "@/components/Background";
-import Window from "@/components/Window";
+import Window from "@/components/windows/Window";
 import Header from "@/components/Header";
-import AboutContent from "@/components/AboutContent";
-import ContactContent from "@/components/ContactContent";
+import AboutContent from "@/components/windows/about/AboutContent";
+import ContactContent from "@/components/windows/contact/ContactContent";
+import { WindowsProvider } from "@/components/windows/WindowsContext";
 
 const Page = async ({
   searchParams,
@@ -21,27 +22,29 @@ const Page = async ({
       <Header className="w-full flex flex-row border-b border-white bg-indigo-400/20 backdrop-blur-sm" />
 
       <div className="flex-1 flex items-center justify-center gap-6">
-        {params.about !== undefined ? (
-          <Window
-            title="About me"
-            slug="about"
-            className="max-w-2xl"
-            icon={<InformationSource size={16} strokeWidth={0.3} />}
-          >
-            <AboutContent />
-          </Window>
-        ) : null}
+        <WindowsProvider>
+          {params.about !== undefined ? (
+            <Window
+              title="About me"
+              slug="about"
+              className="max-w-2xl"
+              icon={<InformationSource size={16} strokeWidth={0.3} />}
+            >
+              <AboutContent />
+            </Window>
+          ) : null}
 
-        {params.contact !== undefined ? (
-          <Window
-            title="Contact"
-            slug="contact"
-            className="min-w-md"
-            icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
-          >
-            <ContactContent />
-          </Window>
-        ) : null}
+          {params.contact !== undefined ? (
+            <Window
+              title="Contact"
+              slug="contact"
+              className="min-w-md"
+              icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
+            >
+              <ContactContent />
+            </Window>
+          ) : null}
+        </WindowsProvider>
       </div>
     </main>
   );

@@ -3,8 +3,9 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef, PointerEvent, ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "./primitives/Button";
+import { Button } from "../primitives/Button";
 import useDraggable from "@/hooks/useDraggable";
+import { useWindows } from "./WindowsContext";
 
 const TitleBarLines = ({ className }: { className?: string }) => (
   <div className={cn("flex flex-col gap-px flex-1", className)}>
@@ -21,8 +22,8 @@ const CloseButton = ({
   slug: string;
   className?: string;
 }) => {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleClose = useCallback(() => {
     const newParams = new URLSearchParams(searchParams);
@@ -120,20 +121,24 @@ const Window = ({
     defaultPosition,
   });
 
+  const { getZIndex, bringToFront } = useWindows();
+  const zIndex = getZIndex(slug);
+
   return (
     <div
       ref={windowRef}
       className={cn(
         "backdrop-blur-sm bg-indigo-400/20 border border-white pixel-corners",
-        position != null && "z-50",
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
-      style={
-        position != null
+      style={{
+        zIndex,
+        ...(position != null
           ? { left: position.x, top: position.y, position: "fixed" }
-          : undefined
-      }
+          : undefined),
+      }}
+      onPointerDown={() => bringToFront(slug)}
     >
       <WindowHeader
         title={title}
