@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef, PointerEvent, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../primitives/Button";
-import useDraggable from "@/hooks/useDraggable";
+import usePosition from "@/hooks/usePosition";
 import { useWindows } from "./WindowsContext";
 
 const TitleBarLines = ({ className }: { className?: string }) => (
@@ -53,25 +53,20 @@ type WindowHeaderProps = {
   title: string;
   icon: ReactNode;
   slug: string;
-  handlePointerDown: (e: PointerEvent) => void;
-  handlePointerMove: (e: PointerEvent) => void;
-  handlePointerUp: (e: PointerEvent) => void;
+  handlers: {
+    onPointerDown: (e: PointerEvent) => void;
+    onPointerMove: (e: PointerEvent) => void;
+    onPointerUp: () => void;
+  };
 };
 
-const WindowHeader = ({
-  title,
-  icon,
-  slug,
-  handlePointerDown,
-  handlePointerMove,
-  handlePointerUp,
-}: WindowHeaderProps) => {
+const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
   return (
     <div
       className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing"
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
+      onPointerDown={handlers.onPointerDown}
+      onPointerMove={handlers.onPointerMove}
+      onPointerUp={handlers.onPointerUp}
     >
       <TitleBarLines className="max-w-7" />
 
@@ -91,37 +86,34 @@ const WindowHeader = ({
   );
 };
 
+// const offsetPosition = (
+//   position: { x: number; y: number },
+//   windowRef: HTMLDivElement,
+// ) => {
+//   return {
+//     x: position.x - windowRef.offsetWidth / 2,
+//     y: position.y - windowRef.offsetHeight / 2,
+//   };
+// };
+
 type WindowProps = {
   title: string;
   slug: string;
   children: ReactNode;
   icon?: ReactNode;
   className?: string;
-  defaultPosition?: { x: number; y: number };
 };
 
-const Window = ({
-  title,
-  slug,
-  children,
-  icon,
-  className,
-  defaultPosition,
-}: WindowProps) => {
+const Window = ({ title, slug, children, icon, className }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const {
-    isDragging,
-    position,
-    handlePointerDown,
-    handlePointerMove,
-    handlePointerUp,
-  } = useDraggable({
-    targetRef: windowRef,
-    defaultPosition,
+  const { bringToFront, getZIndex } = useWindows();
+
+  const { position, isDragging, handlers } = usePosition({
+    slug,
+    windowRef,
   });
 
-  const { getZIndex, bringToFront } = useWindows();
   const zIndex = getZIndex(slug);
 
   return (
@@ -136,18 +128,11 @@ const Window = ({
         zIndex,
         ...(position != null
           ? { left: position.x, top: position.y, position: "fixed" }
-          : undefined),
+          : { visibility: "hidden" }),
       }}
       onPointerDown={() => bringToFront(slug)}
     >
-      <WindowHeader
-        title={title}
-        icon={icon}
-        slug={slug}
-        handlePointerDown={handlePointerDown}
-        handlePointerMove={handlePointerMove}
-        handlePointerUp={handlePointerUp}
-      />
+      <WindowHeader title={title} icon={icon} slug={slug} handlers={handlers} />
 
       {children}
 

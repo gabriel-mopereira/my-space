@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { IBM_Plex_Mono } from "next/font/google";
 import { ReactNode } from "react";
 import localFont from "next/font/local";
+import { WindowsProvider } from "@/components/windows/WindowsContext";
 
 import "@/styles/globals.css";
 
@@ -42,7 +43,9 @@ export default function RootLayout({
       lang="en"
       className={`h-full antialiased ${ibmPlex.variable} ${chicagoKare.variable}`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <WindowsProvider>
+        <body className="min-h-full flex flex-col">{children}</body>
+      </WindowsProvider>
     </html>
   );
 }

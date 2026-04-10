@@ -3,14 +3,22 @@
 import {
   createContext,
   useContext,
-  ReactNode,
   useState,
+  ReactNode,
   useCallback,
+  useRef,
 } from "react";
 import { useSearchParams } from "next/navigation";
 
+type Postion = {
+  x: number;
+  y: number;
+};
+
 type WindowsContext = {
-  windowsOrder: string[];
+  registerPosition: (slug: string, position: Postion) => void;
+  unregisterPosition: (slug: string) => void;
+  getPositions: () => Record<string, Postion>;
   bringToFront: (windowSlug: string) => void;
   getZIndex: (windowSlug: string) => number;
 };
@@ -20,8 +28,35 @@ export const WindowsContext = createContext<WindowsContext | null>(null);
 const WindowsProvider = ({ children }: { children: ReactNode }) => {
   const searchParams = useSearchParams();
 
-  const [windowsOrder, setWindowsOrder] = useState<string[]>(() =>
-    Array.from(searchParams.keys()),
+  const positions = useRef<Record<string, Postion>>({});
+
+  const [windowsOrder, setWindowsOrder] = useState<string[]>(
+    searchParams.keys().toArray(),
+  );
+
+  const registerPosition = useCallback(
+    (slug: string, position: Postion) => {
+      positions.current[slug] = position;
+    },
+    [positions],
+  );
+
+  const unregisterPosition = useCallback(
+    (slug: string) => {
+      delete positions.current[slug];
+    },
+    [positions],
+  );
+
+  const getPositions = useCallback(() => {
+    return positions.current;
+  }, [positions]);
+
+  const getZIndex = useCallback(
+    (windowSlug: string) => {
+      return windowsOrder.indexOf(windowSlug) + 1;
+    },
+    [windowsOrder],
   );
 
   const bringToFront = useCallback(
@@ -38,15 +73,16 @@ const WindowsProvider = ({ children }: { children: ReactNode }) => {
     [windowsOrder],
   );
 
-  const getZIndex = useCallback(
-    (windowSlug: string) => {
-      return windowsOrder.indexOf(windowSlug) + 1;
-    },
-    [windowsOrder],
-  );
-
   return (
-    <WindowsContext.Provider value={{ windowsOrder, bringToFront, getZIndex }}>
+    <WindowsContext.Provider
+      value={{
+        registerPosition,
+        unregisterPosition,
+        getPositions,
+        bringToFront,
+        getZIndex,
+      }}
+    >
       {children}
     </WindowsContext.Provider>
   );
