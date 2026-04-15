@@ -14,19 +14,21 @@ const HEADER_OPTIONS = [
     icon: InformationSource,
   },
   {
-    label: "Projects",
-    slug: "projects",
-    icon: Code,
-  },
-  {
     label: "Contact",
     slug: "contact",
     icon: SpeechBaloon,
   },
   {
+    label: "Projects",
+    slug: "projects",
+    icon: Code,
+    disabled: true,
+  },
+  {
     label: "Curriculum Vitae",
     slug: "cv",
     icon: PageCurl,
+    disabled: true,
   },
 ];
 

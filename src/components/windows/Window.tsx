@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useRef, PointerEvent, ReactNode } from "react";
+import { useCallback, useRef, PointerEvent, ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../primitives/Button";
 import usePosition from "@/hooks/usePosition";
@@ -107,7 +107,8 @@ type WindowProps = {
 const Window = ({ title, slug, children, icon, className }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const { bringToFront, getZIndex } = useWindows();
+  const { registerWindow, unregisterWindow, bringToFront, getZIndex } =
+    useWindows();
 
   const { position, isDragging, handlers } = usePosition({
     slug,
@@ -115,6 +116,14 @@ const Window = ({ title, slug, children, icon, className }: WindowProps) => {
   });
 
   const zIndex = getZIndex(slug);
+
+  useEffect(() => {
+    registerWindow(slug);
+
+    return () => {
+      unregisterWindow(slug);
+    };
+  }, [slug, registerWindow, unregisterWindow]);
 
   return (
     <div
