@@ -5,12 +5,12 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button select-none inline-flex shrink-0 items-center justify-center bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
-          "text-primary-foreground inset-shadow-button bg-transparent pixel-corners active:inset-shadow-button-active active:text-black active:bg-black/10",
+          "text-primary-foreground not-disabled:inset-shadow-button bg-transparent pixel-corners active:inset-shadow-button-active active:text-black active:bg-black/10 disabled:pointer-events-none disabled:opacity-50",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
@@ -44,15 +44,20 @@ const buttonVariants = cva(
 );
 
 const ButtonWrapper = ({
-  className,
   children,
+  className,
+  disabled,
 }: {
-  className?: string;
   children: ReactNode;
+  className?: string;
+  disabled?: boolean;
 }) => (
   <div
     className={cn(
-      "p-0.5 h-fit pixel-corners flex items-center justify-center inset-shadow-button-wrapper",
+      "p-0.5 h-fit pixel-corners flex items-center justify-center",
+      disabled
+        ? "opacity-50 cursor-not-allowed"
+        : "inset-shadow-button-wrapper",
       className,
     )}
   >

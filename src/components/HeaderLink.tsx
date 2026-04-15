@@ -36,7 +36,11 @@ const HeaderLink = ({
     <Link
       href={href}
       scroll={false}
-      className={cn(className, disabled && "*:opacity-50 pointer-events-none")}
+      className={cn(
+        "font-chicago-kare flex-1 not-first:border-l border-white flex justify-between items-center px-2 py-0.5 leading-5 text-xl select-none",
+        disabled ? "*:opacity-50 pointer-events-none" : "inset-shadow-header",
+        className,
+      )}
       aria-disabled={disabled}
     >
       {children}
