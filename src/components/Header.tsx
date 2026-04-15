@@ -35,11 +35,12 @@ const HEADER_OPTIONS = [
 const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div {...props}>
-      {HEADER_OPTIONS.map(({ label, slug, icon: Icon }) => (
+      {HEADER_OPTIONS.map(({ label, slug, icon: Icon, disabled }) => (
         <HeaderLink
           key={label}
           paramKey={slug}
           className="font-chicago-kare flex-1 not-first:border-l border-white flex justify-between items-center px-2 py-0.5 leading-5 text-xl inset-shadow-pixelated"
+          disabled={disabled}
         >
           <span>
             <span className="underline">{label[0]}</span>

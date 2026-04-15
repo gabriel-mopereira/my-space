@@ -3,14 +3,21 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 type HeaderLinkProps = {
   paramKey: string;
   children: ReactNode;
   className?: string;
+  disabled?: boolean;
 };
 
-const HeaderLink = ({ paramKey, children, className }: HeaderLinkProps) => {
+const HeaderLink = ({
+  paramKey,
+  children,
+  className,
+  disabled,
+}: HeaderLinkProps) => {
   const searchParams = useSearchParams();
 
   const href = (() => {
@@ -26,7 +33,12 @@ const HeaderLink = ({ paramKey, children, className }: HeaderLinkProps) => {
   })();
 
   return (
-    <Link href={href} scroll={false} className={className}>
+    <Link
+      href={href}
+      scroll={false}
+      className={cn(className, disabled && "*:opacity-50 pointer-events-none")}
+      aria-disabled={disabled}
+    >
       {children}
     </Link>
   );
