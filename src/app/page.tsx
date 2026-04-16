@@ -5,6 +5,8 @@ import Header from "@/components/navigation/Header";
 import AboutContent from "@/components/windows/about/AboutContent";
 import ContactContent from "@/components/windows/contact/ContactContent";
 import Footer from "@/components/navigation/Footer";
+import { WindowsProvider } from "@/components/windows/WindowsContext";
+import { NAV_OPTIONS } from "@/components/navigation/options";
 
 const Page = async ({
   searchParams,
@@ -15,42 +17,42 @@ const Page = async ({
 }) => {
   const params = await searchParams;
 
+  const initialOpen = Object.keys(params).filter((key) =>
+    NAV_OPTIONS.some((opt) => opt.slug === key && !opt.disabled),
+  );
+
   return (
-    <main className="relative flex flex-col flex-1 items-center justify-center text-white font-ibm-plex bg-black">
-      <Background />
+    <WindowsProvider initialOpen={initialOpen}>
+      <main className="relative flex flex-col flex-1 items-center justify-center text-white font-ibm-plex bg-black">
+        <Background />
 
-      <Header searchParams={params} className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
+        <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
 
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
-        <Footer searchParams={params} />
-      </div>
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
+          <Footer />
+        </div>
 
-      <div className="relative flex-1">
-        {params.about !== undefined ? (
+        <div className="relative flex-1">
           <Window
             title="About me"
             slug="about"
-            searchParams={params}
             className="max-w-94 md:max-w-2xl"
             icon={<InformationSource size={16} strokeWidth={0.3} />}
           >
             <AboutContent />
           </Window>
-        ) : null}
 
-        {params.contact !== undefined ? (
           <Window
             title="Contact"
             slug="contact"
-            searchParams={params}
             className="max-w-85 md:max-w-md"
             icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
           >
             <ContactContent />
           </Window>
-        ) : null}
-      </div>
-    </main>
+        </div>
+      </main>
+    </WindowsProvider>
   );
 };
 
