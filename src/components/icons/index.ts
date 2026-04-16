@@ -1,7 +1,7 @@
 export { Code } from "./Code";
 export { Envelope } from "./Envelope";
 export { GitHub } from "./GitHub";
-export { HappyPersonRaisingOneHand } from "./HappyPersonRaisingOneHand";
+export { ClappingHands } from "./ClappingHands";
 export { InformationSource } from "./InformationSource";
 export { PageCurl } from "./PageCurl";
 export { Phone } from "./Phone";
