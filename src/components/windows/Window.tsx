@@ -31,6 +31,7 @@ const CloseButton = ({
     <Button
       aria-label="Close window"
       onClick={handleClose}
+      onPointerDown={(e) => e.stopPropagation()}
       size="windowControl"
       variant="secondary"
       className={cn(
@@ -57,7 +58,7 @@ type WindowHeaderProps = {
 const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
   return (
     <div
-      className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15"
+      className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15 touch-action-none"
       onPointerDown={handlers.onPointerDown}
       onPointerMove={handlers.onPointerMove}
       onPointerUp={handlers.onPointerUp}
