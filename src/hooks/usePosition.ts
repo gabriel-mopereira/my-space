@@ -80,7 +80,18 @@ const usePosition = ({
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    if (!isOpen || initialized.current || !windowRef.current) {
+    if (!isOpen) {
+      if (initialized.current) {
+        initialized.current = false;
+
+        setPosition(null);
+        unregisterPosition(slug);
+      }
+
+      return;
+    }
+
+    if (!windowRef.current) {
       return;
     }
 
@@ -93,14 +104,16 @@ const usePosition = ({
 
     registerPosition(slug, initialPosition);
     setPosition(initialPosition);
-    initialized.current = true;
-  }, [isOpen, slug, windowRef, getPositions, registerPosition]);
 
-  useEffect(() => {
-    return () => {
-      unregisterPosition(slug);
-    };
-  }, [slug, unregisterPosition]);
+    initialized.current = true;
+  }, [
+    isOpen,
+    slug,
+    windowRef,
+    getPositions,
+    registerPosition,
+    unregisterPosition,
+  ]);
 
   const handlePointerDown = useCallback(
     (e: PointerEvent) => {
