@@ -69,7 +69,7 @@
 
 :root {
     /* Background */
-    --background: oklch(0 0 0);
+    --background: oklch(0.45 0.09 280);
     --foreground: oklch(1 0 0);
 
     /* Primary */
