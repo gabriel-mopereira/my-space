@@ -1,9 +1,10 @@
 import { InformationSource, SpeechBaloon } from "@/components/icons";
 import Background from "@/components/Background";
 import Window from "@/components/windows/Window";
-import Header from "@/components/Header";
+import Header from "@/components/navigation/Header";
 import AboutContent from "@/components/windows/about/AboutContent";
 import ContactContent from "@/components/windows/contact/ContactContent";
+import Footer from "@/components/navigation/Footer";
 
 const Page = async ({
   searchParams,

@@ -5,19 +5,23 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type HeaderLinkProps = {
+type NavLinkProps = {
   paramKey: string;
   children: ReactNode;
   className?: string;
+  activeClassName?: string;
+  disabledClassName?: string;
   disabled?: boolean;
 };
 
-const HeaderLink = ({
+const NavLink = ({
   paramKey,
   children,
   className,
+  activeClassName,
+  disabledClassName,
   disabled,
-}: HeaderLinkProps) => {
+}: NavLinkProps) => {
   const searchParams = useSearchParams();
 
   const href = (() => {
@@ -37,8 +41,9 @@ const HeaderLink = ({
       href={href}
       scroll={false}
       className={cn(
-        "font-chicago-kare flex-1 not-first:border-l border-white flex justify-between items-center px-2 py-0.5 leading-5 text-xl select-none",
-        disabled ? "*:opacity-50 pointer-events-none" : "inset-shadow-header",
+        disabled
+          ? (disabledClassName ?? "*:opacity-50 pointer-events-none")
+          : activeClassName,
         className,
       )}
       aria-disabled={disabled}
@@ -48,4 +53,4 @@ const HeaderLink = ({
   );
 };
 
-export default HeaderLink;
+export default NavLink;
