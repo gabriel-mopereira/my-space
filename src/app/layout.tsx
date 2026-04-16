@@ -1,4 +1,4 @@
-import { Metadata, Viewport } from "next";
+import { Metadata } from "next";
 import { IBM_Plex_Mono } from "next/font/google";
 import { ReactNode } from "react";
 import localFont from "next/font/local";
@@ -26,10 +26,6 @@ const chicagoKare = localFont({
     },
   ],
 });
-
-export const viewport: Viewport = {
-  viewportFit: "cover",
-};
 
 export const metadata: Metadata = {
   title: "Gabriel Pereira - Software Engineer",
