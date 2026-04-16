@@ -43,6 +43,15 @@
     --inset-shadow-header:
         inset 1px 1px 0px var(--shadow-light),
         inset -1px -1px 0px var(--shadow-dark);
+    --inset-shadow-header-active:
+        inset 1px 1px 0px var(--shadow-dark),
+        inset -1px -1px 0px var(--shadow-light);
+    --inset-shadow-footer:
+        inset 3px 3px 0px var(--shadow-light),
+        inset -3px -3px 0px var(--shadow-dark);
+    --inset-shadow-footer-active:
+        inset 3px 3px 0px var(--shadow-dark),
+        inset -3px -3px 0px var(--shadow-light);
     --inset-shadow-button:
         inset 1px 1px 0px var(--shadow-light),
         inset 2px 1px 0px var(--shadow-light),
