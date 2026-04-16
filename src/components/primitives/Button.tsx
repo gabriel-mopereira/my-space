@@ -10,13 +10,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "text-primary-foreground not-disabled:inset-shadow-button bg-transparent pixel-corners active:inset-shadow-button-active active:text-black active:bg-black/10 disabled:pointer-events-none disabled:opacity-50",
+          "text-primary-foreground not-disabled:inset-shadow-button bg-transparent pixel-corners active:inset-shadow-button-active active:text-neutral-700 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-600/10",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
-          "border border-border text-primary-foreground inset-shadow-button bg-transparent active:inset-shadow-button-active active:text-black active:bg-black/10",
+          "border border-border text-primary-foreground not-disabled:inset-shadow-button bg-transparent active:inset-shadow-button-active active:text-neutral-700 hover:bg-neutral-600/10",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
+          "text-primary-foreground bg-transparent active:text-neutral-700 hover:bg-neutral-600/10",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
         link: "text-primary underline-offset-4 hover:underline",
@@ -34,6 +34,7 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        none: undefined,
       },
     },
     defaultVariants: {
