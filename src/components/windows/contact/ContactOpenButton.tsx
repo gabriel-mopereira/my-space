@@ -17,7 +17,10 @@ const ContactOpenButton = ({
 
   return (
     <ButtonWrapper>
-      <Button className="font-chicago-kare text-lg" onClick={handleClick}>
+      <Button
+        className="font-chicago-kare text-md md:text-lg"
+        onClick={handleClick}
+      >
         Open
       </Button>
     </ButtonWrapper>

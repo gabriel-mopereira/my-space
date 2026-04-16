@@ -63,7 +63,7 @@ type WindowHeaderProps = {
 const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
   return (
     <div
-      className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing"
+      className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15"
       onPointerDown={handlers.onPointerDown}
       onPointerMove={handlers.onPointerMove}
       onPointerUp={handlers.onPointerUp}
@@ -74,7 +74,7 @@ const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
 
       <div className="flex items-center gap-2 px-3">
         <span className="mb-0.5">{icon}</span>
-        <p className="text-2xl leading-4.5 font-chicago-kare whitespace-nowrap">
+        <p className="text-xl md:text-2xl leading-4.5 font-chicago-kare whitespace-nowrap">
           {title}
         </p>
       </div>
@@ -85,16 +85,6 @@ const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
     </div>
   );
 };
-
-// const offsetPosition = (
-//   position: { x: number; y: number },
-//   windowRef: HTMLDivElement,
-// ) => {
-//   return {
-//     x: position.x - windowRef.offsetWidth / 2,
-//     y: position.y - windowRef.offsetHeight / 2,
-//   };
-// };
 
 type WindowProps = {
   title: string;
@@ -129,7 +119,7 @@ const Window = ({ title, slug, children, icon, className }: WindowProps) => {
     <div
       ref={windowRef}
       className={cn(
-        "backdrop-blur-sm bg-indigo-400/20 border border-white pixel-corners",
+        "w-max backdrop-blur-sm border border-white pixel-corners",
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
@@ -145,7 +135,7 @@ const Window = ({ title, slug, children, icon, className }: WindowProps) => {
 
       {children}
 
-      <div className="h-5 inset-shadow-header border-t border-border" />
+      <div className="h-5 inset-shadow-header border-t border-border bg-primary/15" />
     </div>
   );
 };
