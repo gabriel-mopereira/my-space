@@ -53,6 +53,7 @@ const calculatePosition = (
 type usePositionParams = {
   slug: string;
   windowRef: RefObject<HTMLDivElement | null>;
+  isOpen: boolean;
 };
 
 type usePositionReturn = {
@@ -68,16 +69,18 @@ type usePositionReturn = {
 const usePosition = ({
   slug,
   windowRef,
+  isOpen,
 }: usePositionParams): usePositionReturn => {
   const { registerPosition, unregisterPosition, getPositions } = useWindows();
 
   const dragOffset = useRef({ x: 0, y: 0 });
+  const initialized = useRef(false);
 
   const [position, setPosition] = useState<Position | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    if (windowRef.current === null || !windowRef.current) {
+    if (!isOpen || initialized.current || !windowRef.current) {
       return;
     }
 
@@ -89,13 +92,15 @@ const usePosition = ({
     );
 
     registerPosition(slug, initialPosition);
-
     setPosition(initialPosition);
+    initialized.current = true;
+  }, [isOpen, slug, windowRef, getPositions, registerPosition]);
 
+  useEffect(() => {
     return () => {
       unregisterPosition(slug);
     };
-  }, [slug, windowRef, getPositions, registerPosition, unregisterPosition]);
+  }, [slug, unregisterPosition]);
 
   const handlePointerDown = useCallback(
     (e: PointerEvent) => {

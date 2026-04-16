@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useCallback, useRef, PointerEvent, ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../primitives/Button";
@@ -17,26 +16,16 @@ const TitleBarLines = ({ className }: { className?: string }) => (
 
 const CloseButton = ({
   slug,
-  searchParams,
   className,
 }: {
   slug: string;
-  searchParams: Record<string, string | undefined>;
   className?: string;
 }) => {
-  const router = useRouter();
+  const { closeWindow } = useWindows();
 
   const handleClose = useCallback(() => {
-    const newParams = new URLSearchParams();
-
-    for (const [key, value] of Object.entries(searchParams)) {
-      if (value !== undefined) newParams.set(key, value);
-    }
-
-    newParams.delete(slug);
-
-    router.replace(`/?${newParams.toString()}`, { scroll: false });
-  }, [searchParams, slug, router]);
+    closeWindow(slug);
+  }, [closeWindow, slug]);
 
   return (
     <Button
@@ -58,7 +47,6 @@ type WindowHeaderProps = {
   title: string;
   icon: ReactNode;
   slug: string;
-  searchParams: Record<string, string | undefined>;
   handlers: {
     onPointerDown: (e: PointerEvent) => void;
     onPointerMove: (e: PointerEvent) => void;
@@ -66,7 +54,7 @@ type WindowHeaderProps = {
   };
 };
 
-const WindowHeader = ({ title, icon, slug, searchParams, handlers }: WindowHeaderProps) => {
+const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
   return (
     <div
       className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15"
@@ -87,7 +75,7 @@ const WindowHeader = ({ title, icon, slug, searchParams, handlers }: WindowHeade
 
       <TitleBarLines className="pr-3" />
 
-      <CloseButton slug={slug} searchParams={searchParams} />
+      <CloseButton slug={slug} />
     </div>
   );
 };
@@ -95,32 +83,34 @@ const WindowHeader = ({ title, icon, slug, searchParams, handlers }: WindowHeade
 type WindowProps = {
   title: string;
   slug: string;
-  searchParams: Record<string, string | undefined>;
   children: ReactNode;
   icon?: ReactNode;
   className?: string;
 };
 
-const Window = ({ title, slug, searchParams, children, icon, className }: WindowProps) => {
+const Window = ({ title, slug, children, icon, className }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const { registerWindow, unregisterWindow, bringToFront, getZIndex } =
+  const { registerWindow, unregisterWindow, bringToFront, getZIndex, isOpen } =
     useWindows();
+
+  const open = isOpen(slug);
 
   const { position, isDragging, handlers } = usePosition({
     slug,
     windowRef,
+    isOpen: open,
   });
 
   const zIndex = getZIndex(slug);
 
   useEffect(() => {
-    registerWindow(slug);
-
-    return () => {
+    if (open) {
+      registerWindow(slug);
+    } else {
       unregisterWindow(slug);
-    };
-  }, [slug, registerWindow, unregisterWindow]);
+    }
+  }, [open, slug, registerWindow, unregisterWindow]);
 
   return (
     <div
@@ -132,13 +122,14 @@ const Window = ({ title, slug, searchParams, children, icon, className }: Window
       )}
       style={{
         zIndex,
+        display: open ? undefined : "none",
         ...(position != null
           ? { left: position.x, top: position.y, position: "fixed" }
           : { visibility: "hidden" }),
       }}
       onPointerDown={() => bringToFront(slug)}
     >
-      <WindowHeader title={title} icon={icon} slug={slug} searchParams={searchParams} handlers={handlers} />
+      <WindowHeader title={title} icon={icon} slug={slug} handlers={handlers} />
 
       {children}
 

@@ -3,11 +3,7 @@ import { NAV_OPTIONS } from "./options";
 import NavLink from "./NavLink";
 import { cn } from "@/lib/utils";
 
-type FooterProps = {
-  searchParams: Record<string, string | undefined>;
-};
-
-const Footer = ({ searchParams }: FooterProps) => {
+const Footer = () => {
   return (
     <div className="flex backdrop-blur-sm bg-primary/15">
       <ButtonWrapper className="p-1.5">
@@ -16,7 +12,6 @@ const Footer = ({ searchParams }: FooterProps) => {
             <div key={slug} className="not-first:border-l border-white">
               <NavLink
                 paramKey={slug}
-                searchParams={searchParams}
                 className={cn(
                   "select-none shrink-0 items-center justify-center text-primary-foreground bg-transparent flex size-14",
                   disabled
