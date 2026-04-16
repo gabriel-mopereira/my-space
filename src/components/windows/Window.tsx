@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useRef, PointerEvent, ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../primitives/Button";
@@ -17,16 +17,21 @@ const TitleBarLines = ({ className }: { className?: string }) => (
 
 const CloseButton = ({
   slug,
+  searchParams,
   className,
 }: {
   slug: string;
+  searchParams: Record<string, string | undefined>;
   className?: string;
 }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleClose = useCallback(() => {
-    const newParams = new URLSearchParams(searchParams);
+    const newParams = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (value !== undefined) newParams.set(key, value);
+    }
 
     newParams.delete(slug);
 
@@ -53,6 +58,7 @@ type WindowHeaderProps = {
   title: string;
   icon: ReactNode;
   slug: string;
+  searchParams: Record<string, string | undefined>;
   handlers: {
     onPointerDown: (e: PointerEvent) => void;
     onPointerMove: (e: PointerEvent) => void;
@@ -60,7 +66,7 @@ type WindowHeaderProps = {
   };
 };
 
-const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
+const WindowHeader = ({ title, icon, slug, searchParams, handlers }: WindowHeaderProps) => {
   return (
     <div
       className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15"
@@ -81,7 +87,7 @@ const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
 
       <TitleBarLines className="pr-3" />
 
-      <CloseButton slug={slug} />
+      <CloseButton slug={slug} searchParams={searchParams} />
     </div>
   );
 };
@@ -89,12 +95,13 @@ const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
 type WindowProps = {
   title: string;
   slug: string;
+  searchParams: Record<string, string | undefined>;
   children: ReactNode;
   icon?: ReactNode;
   className?: string;
 };
 
-const Window = ({ title, slug, children, icon, className }: WindowProps) => {
+const Window = ({ title, slug, searchParams, children, icon, className }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
 
   const { registerWindow, unregisterWindow, bringToFront, getZIndex } =
@@ -131,7 +138,7 @@ const Window = ({ title, slug, children, icon, className }: WindowProps) => {
       }}
       onPointerDown={() => bringToFront(slug)}
     >
-      <WindowHeader title={title} icon={icon} slug={slug} handlers={handlers} />
+      <WindowHeader title={title} icon={icon} slug={slug} searchParams={searchParams} handlers={handlers} />
 
       {children}
 

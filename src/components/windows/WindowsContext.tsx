@@ -8,7 +8,6 @@ import {
   useCallback,
   useRef,
 } from "react";
-import { useSearchParams } from "next/navigation";
 
 type Postion = {
   x: number;
@@ -28,15 +27,9 @@ type WindowsContext = {
 export const WindowsContext = createContext<WindowsContext | null>(null);
 
 const WindowsProvider = ({ children }: { children: ReactNode }) => {
-  const searchParams = useSearchParams();
-
   const positions = useRef<Record<string, Postion>>({});
 
-  const [windowsOrder, setWindowsOrder] = useState<string[]>(
-    searchParams.keys().toArray(),
-  );
-
-  console.log(windowsOrder);
+  const [windowsOrder, setWindowsOrder] = useState<string[]>([]);
 
   const registerPosition = useCallback(
     (slug: string, position: Postion) => {

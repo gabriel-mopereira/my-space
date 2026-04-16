@@ -1,16 +1,20 @@
 import { HTMLAttributes } from "react";
 import { NAV_OPTIONS } from "./options";
 import NavLink from "./NavLink";
-
 import { cn } from "@/lib/utils";
 
-const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
+type HeaderProps = HTMLAttributes<HTMLDivElement> & {
+  searchParams: Record<string, string | undefined>;
+};
+
+const Header = ({ searchParams, ...props }: HeaderProps) => {
   return (
     <div {...props}>
       {NAV_OPTIONS.map(({ label, slug, icon: Icon, disabled }) => (
         <NavLink
           key={slug}
           paramKey={slug}
+          searchParams={searchParams}
           className={cn(
             "font-chicago-kare flex-1 not-first:border-l border-white flex justify-between items-center px-2 py-0.5 leading-5 text-xl select-none",
             disabled

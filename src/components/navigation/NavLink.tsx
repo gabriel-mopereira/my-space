@@ -1,49 +1,42 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type NavLinkProps = {
   paramKey: string;
+  searchParams: Record<string, string | undefined>;
   children: ReactNode;
   className?: string;
-  activeClassName?: string;
-  disabledClassName?: string;
   disabled?: boolean;
 };
 
 const NavLink = ({
   paramKey,
+  searchParams,
   children,
   className,
-  activeClassName,
-  disabledClassName,
   disabled,
 }: NavLinkProps) => {
-  const searchParams = useSearchParams();
+  const newParams = new URLSearchParams();
 
-  const href = (() => {
-    const newParams = new URLSearchParams(searchParams);
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (value !== undefined) newParams.set(key, value);
+  }
 
-    if (searchParams.has(paramKey)) {
-      newParams.delete(paramKey);
-    } else {
-      newParams.set(paramKey, "");
-    }
+  if (newParams.has(paramKey)) {
+    newParams.delete(paramKey);
+  } else {
+    newParams.set(paramKey, "");
+  }
 
-    return `?${newParams.toString()}`;
-  })();
+  const href = `?${newParams.toString()}`;
 
   return (
     <Link
       href={href}
       scroll={false}
       className={cn(
-        disabled
-          ? (disabledClassName ?? "*:opacity-50 pointer-events-none")
-          : activeClassName,
+        disabled ? "*:opacity-50 pointer-events-none" : undefined,
         className,
       )}
       aria-disabled={disabled}

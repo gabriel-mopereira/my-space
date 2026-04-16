@@ -19,10 +19,10 @@ const Page = async ({
     <main className="relative flex flex-col flex-1 items-center justify-center text-white font-ibm-plex bg-black">
       <Background />
 
-      <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
+      <Header searchParams={params} className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
 
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
-        <Footer />
+        <Footer searchParams={params} />
       </div>
 
       <div className="relative flex-1">
@@ -30,6 +30,7 @@ const Page = async ({
           <Window
             title="About me"
             slug="about"
+            searchParams={params}
             className="max-w-94 md:max-w-2xl"
             icon={<InformationSource size={16} strokeWidth={0.3} />}
           >
@@ -41,6 +42,7 @@ const Page = async ({
           <Window
             title="Contact"
             slug="contact"
+            searchParams={params}
             className="max-w-85 md:max-w-md"
             icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
           >
