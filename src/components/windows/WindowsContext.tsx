@@ -7,32 +7,87 @@ import {
   ReactNode,
   useCallback,
   useRef,
+  useEffect,
 } from "react";
 
-type Postion = {
+type Position = {
   x: number;
   y: number;
 };
 
 type WindowsContext = {
-  registerPosition: (slug: string, position: Postion) => void;
+  registerPosition: (slug: string, position: Position) => void;
   unregisterPosition: (slug: string) => void;
-  getPositions: () => Record<string, Postion>;
+  getPositions: () => Record<string, Position>;
   registerWindow: (slug: string) => void;
   unregisterWindow: (slug: string) => void;
   bringToFront: (slug: string) => void;
   getZIndex: (slug: string) => number;
+  isOpen: (slug: string) => boolean;
+  toggleWindow: (slug: string) => void;
+  closeWindow: (slug: string) => void;
 };
 
 export const WindowsContext = createContext<WindowsContext | null>(null);
 
-const WindowsProvider = ({ children }: { children: ReactNode }) => {
-  const positions = useRef<Record<string, Postion>>({});
+type WindowsProviderProps = {
+  initialOpen?: string[];
+  children: ReactNode;
+};
+
+const WindowsProvider = ({
+  initialOpen = [],
+  children,
+}: WindowsProviderProps) => {
+  const positions = useRef<Record<string, Position>>({});
+
+  const [openWindows, setOpenWindows] = useState<Set<string>>(
+    () => new Set(initialOpen),
+  );
 
   const [windowsOrder, setWindowsOrder] = useState<string[]>([]);
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    openWindows.forEach((slug) => params.set(slug, ""));
+
+    const search = params.toString();
+
+    window.history.replaceState(null, "", search ? `/?${search}` : "/");
+  }, [openWindows]);
+
+  const isOpen = useCallback(
+    (slug: string) => openWindows.has(slug),
+    [openWindows],
+  );
+
+  const toggleWindow = useCallback((slug: string) => {
+    setOpenWindows((prev) => {
+      const next = new Set(prev);
+
+      if (next.has(slug)) {
+        next.delete(slug);
+      } else {
+        next.add(slug);
+      }
+
+      return next;
+    });
+  }, []);
+
+  const closeWindow = useCallback((slug: string) => {
+    setOpenWindows((prev) => {
+      const next = new Set(prev);
+
+      next.delete(slug);
+
+      return next;
+    });
+  }, []);
+
   const registerPosition = useCallback(
-    (slug: string, position: Postion) => {
+    (slug: string, position: Position) => {
       positions.current[slug] = position;
     },
     [positions],
@@ -94,6 +149,9 @@ const WindowsProvider = ({ children }: { children: ReactNode }) => {
         unregisterWindow,
         bringToFront,
         getZIndex,
+        isOpen,
+        toggleWindow,
+        closeWindow,
       }}
     >
       {children}
