@@ -17,9 +17,14 @@ const Page = async ({
 }) => {
   const params = await searchParams;
 
-  const initialOpen = Object.keys(params).filter((key) =>
-    NAV_OPTIONS.some((opt) => opt.slug === key && !opt.disabled),
-  );
+  const paramKeys = Object.keys(params);
+
+  const initialOpen =
+    paramKeys.length > 0
+      ? paramKeys.filter((key) =>
+          NAV_OPTIONS.some((opt) => opt.slug === key && !opt.disabled),
+        )
+      : ["about"];
 
   return (
     <WindowsProvider initialOpen={initialOpen}>
