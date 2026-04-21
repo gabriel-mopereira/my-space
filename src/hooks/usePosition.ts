@@ -80,18 +80,11 @@ const usePosition = ({
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) {
-      if (initialized.current) {
-        initialized.current = false;
-
-        setPosition(null);
-        unregisterPosition(slug);
-      }
-
+    if (!isOpen || !windowRef.current) {
       return;
     }
 
-    if (!windowRef.current) {
+    if (initialized.current) {
       return;
     }
 
@@ -106,6 +99,12 @@ const usePosition = ({
     setPosition(initialPosition);
 
     initialized.current = true;
+
+    return () => {
+      initialized.current = false;
+      setPosition(null);
+      unregisterPosition(slug);
+    };
   }, [
     isOpen,
     slug,
