@@ -28,7 +28,7 @@ const Page = async ({
 
   return (
     <WindowsProvider initialOpen={initialOpen}>
-      <main className="relative flex flex-col min-h-[120vh] md:min-h-auto flex-1 items-center justify-center text-white font-ibm-plex bg-background">
+      <main className="relative flex flex-col min-h-[120vh] md:min-h-auto flex-1 items-center justify-center text-white font-ibm-plex bg-background -translate-y-[10vh] md:translate-y-0">
         <Background />
 
         <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
