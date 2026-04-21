@@ -33,9 +33,7 @@ const Page = async ({
 
         <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
 
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
-          <Footer />
-        </div>
+        <Footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden" />
 
         <div className="relative flex-1">
           <Window

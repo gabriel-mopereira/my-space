@@ -1,11 +1,15 @@
 import { ButtonWrapper } from "@/components/primitives/Button";
+import { HTMLAttributes } from "react";
 import { NAV_OPTIONS } from "./options";
 import NavLink from "./NavLink";
 import { cn } from "@/lib/utils";
 
-const Footer = () => {
+const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div className="flex backdrop-blur-sm bg-primary/15">
+    <div
+      className={cn("flex backdrop-blur-sm bg-primary/15", props.className)}
+      {...props}
+    >
       <ButtonWrapper className="p-1.5">
         <div className="flex border-white border pixel-corners">
           {NAV_OPTIONS.map(({ slug, icon: Icon, disabled }) => (
