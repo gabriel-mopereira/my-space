@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { IBM_Plex_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
+import Background from "@/components/background";
+
 import "@/styles/globals.css";
 
 // eslint-disable-next-line
@@ -43,7 +45,12 @@ const RootLayout = ({
     className={`h-full antialiased ${ibmPlex.variable} ${chicagoKare.variable}`}
     lang="en"
   >
-    <body className="h-full overflow-hidden flex flex-col">{children}</body>
+    <body className="h-full overflow-hidden flex flex-col">
+      <main className="relative flex flex-col min-h-[130vh] md:min-h-full bg-background">
+        <Background />
+        {children}
+      </main>
+    </body>
   </html>
 );
 

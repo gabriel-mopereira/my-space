@@ -1,5 +1,4 @@
 import { InformationSource, SpeechBaloon } from "@/components/icons";
-import Background from "@/components/background";
 import Window from "@/components/windows/window";
 import Header from "@/components/navigation/header";
 import AboutContent from "@/components/windows/about/about-content";
@@ -33,9 +32,7 @@ const Page = async ({
 
   return (
     <WindowsProvider initialOpen={initialOpen}>
-      <main className="relative flex flex-col min-h-[130vh] md:min-h-auto flex-1 items-center justify-center text-white font-ibm-plex bg-background">
-        <Background />
-
+      <div className="relative text-white font-ibm-plex">
         <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
 
         <Footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden" />
@@ -59,7 +56,7 @@ const Page = async ({
             <ContactContent />
           </Window>
         </div>
-      </main>
+      </div>
     </WindowsProvider>
   );
 };
