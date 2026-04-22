@@ -1,6 +1,6 @@
 import type { IconProps } from "./types";
 
-const Phone = ({
+const PageCurl = ({
   className,
   size = 24,
   strokeWidth = 0,
@@ -9,13 +9,13 @@ const Phone = ({
   <svg
     className={className}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 12 12"
     width={size}
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
     <path
-      d="M4 1h5v2H4zm5 2h2v4H9zM7 7h2v4H7zm-3 5h2v2H4zM2 3h2v9H2zm7 8h2v2H9zm2 2h2v2h-2zm2 2h4v2h-4zm4-2h4v2h-4zm4 2h2v5h-2zM6 14h2v2H6zm2 2h2v2H8zm2 2h2v2h-2zm2 2h9v2h-9z"
+      d="M0 12h8v-1H7V8h3v1h1V1H0Zm1-1V2h9v5H6v4Zm1-3h3V7H2Zm6 3h1v-1H8Zm1-1h1V9H9ZM2 6h7V5H2Zm0-2h7V3H2Zm0 0"
       fill="currentColor"
       stroke="currentColor"
       strokeWidth={strokeWidth}
@@ -23,4 +23,4 @@ const Phone = ({
   </svg>
 );
 
-export { Phone };
+export { PageCurl };

@@ -1,25 +1,16 @@
-import { useWindows } from "@/components/windows/WindowsContext";
-import {
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  PointerEvent,
-} from "react";
+import useWindows from "@/hooks/use-windows";
+import type { RefObject, PointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Position = { x: number; y: number };
 
 const CASCADE_OFFSET = 30;
 
-const isNear = (a: Position, b: Position) => {
-  return (
-    Math.abs(a.x - b.x) < CASCADE_OFFSET && Math.abs(a.y - b.y) < CASCADE_OFFSET
-  );
-};
+const isNear = (a: Position, b: Position) =>
+  Math.abs(a.x - b.x) < CASCADE_OFFSET && Math.abs(a.y - b.y) < CASCADE_OFFSET;
 
 const calculatePosition = (
-  positions: Position[],
+  positions: Array<Position>,
   windowRef: RefObject<HTMLDivElement>,
 ) => {
   const position = {
@@ -51,27 +42,27 @@ const calculatePosition = (
 };
 
 type usePositionParams = {
+  isOpen: boolean;
   slug: string;
   windowRef: RefObject<HTMLDivElement | null>;
-  isOpen: boolean;
 };
 
 type usePositionReturn = {
-  position: Position | null;
-  isDragging: boolean;
   handlers: {
-    onPointerDown: (e: PointerEvent) => void;
-    onPointerMove: (e: PointerEvent) => void;
-    onPointerUp: () => void;
+    handlePointerDown: (e: PointerEvent) => void;
+    handlePointerMove: (e: PointerEvent) => void;
+    handlePointerUp: () => void;
   };
+  isDragging: boolean;
+  position: Position | null;
 };
 
 const usePosition = ({
+  isOpen,
   slug,
   windowRef,
-  isOpen,
 }: usePositionParams): usePositionReturn => {
-  const { registerPosition, unregisterPosition, getPositions } = useWindows();
+  const { getPositions, registerPosition, unregisterPosition } = useWindows();
 
   const dragOffset = useRef({ x: 0, y: 0 });
   const initialized = useRef(false);
@@ -158,13 +149,13 @@ const usePosition = ({
   }, [registerPosition, slug, position]);
 
   return {
-    position,
-    isDragging,
     handlers: {
-      onPointerDown: handlePointerDown,
-      onPointerMove: handlePointerMove,
-      onPointerUp: handlePointerUp,
+      handlePointerDown,
+      handlePointerMove,
+      handlePointerUp,
     },
+    isDragging,
+    position,
   };
 };
 

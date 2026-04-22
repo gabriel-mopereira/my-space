@@ -6,12 +6,12 @@ const AboutContent = () => (
   <div className="flex flex-col md:flex-row p-2 gap-2 items-center">
     <div className="relative aspect-square size-60 border-white border">
       <Image
-        src={Me}
         alt="That's me :ˆ)"
-        width={240}
-        height={240}
         className="object-cover object-top"
+        height={240}
         sizes="240px"
+        src={Me}
+        width={240}
       />
     </div>
 
@@ -20,10 +20,7 @@ const AboutContent = () => (
         <span className="md:block">Hello, </span>
         <span className="inline-flex items-center">
           I&apos;m Gabriel!
-          <ClappingHands
-            strokeWidth={0}
-            className="size-6 md:size-8 inline ml-2"
-          />
+          <ClappingHands className="size-6 md:size-8 inline ml-2" />
         </span>
       </span>
 

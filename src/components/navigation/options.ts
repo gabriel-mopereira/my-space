@@ -7,25 +7,25 @@ import {
 
 export const NAV_OPTIONS = [
   {
+    icon: InformationSource,
     label: "About me",
     slug: "about",
-    icon: InformationSource,
   },
   {
+    icon: SpeechBaloon,
     label: "Contact",
     slug: "contact",
-    icon: SpeechBaloon,
   },
   {
+    disabled: true,
+    icon: Code,
     label: "Projects",
     slug: "projects",
-    icon: Code,
-    disabled: true,
   },
   {
+    disabled: true,
+    icon: PageCurl,
     label: "Resume",
     slug: "resume",
-    icon: PageCurl,
-    disabled: true,
   },
 ];

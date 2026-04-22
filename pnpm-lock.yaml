@@ -76,8 +76,8 @@ importers:
         specifier: ^1.61.0
         version: 1.61.0
       oxlint-config-awesomeness:
-        specifier: ^1.2.0
-        version: 1.2.0(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(oxlint@1.61.0)(typescript@6.0.3)
+        specifier: ^2.0.0
+        version: 2.0.0(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(oxlint@1.61.0)(typescript@6.0.3)
       tailwindcss:
         specifier: ^4.2.4
         version: 4.2.4
@@ -2121,8 +2121,9 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  oxlint-config-awesomeness@1.2.0:
-    resolution: {integrity: sha512-tlijeHYmuDSrKDnKV7YSrGCiPiHfodXifaTMXPWRjNQO31DOKrfmJnnvFixrtcgTAZMnDLEWWHxVLby/s0auyw==}
+  oxlint-config-awesomeness@2.0.0:
+    resolution: {integrity: sha512-7vvb0rzpGcpg0t3z6bgxFPBGhvfiFVUVtTWeUlOnr9KJIowgo14EHk58+1ApVQoWBGZAi4FG3p4QJe8CRBZZpA==}
+    hasBin: true
     peerDependencies:
       oxlint: '>=1.58.0 <2.0.0'
 
@@ -4461,7 +4462,7 @@ snapshots:
       '@oxfmt/binding-win32-ia32-msvc': 0.46.0
       '@oxfmt/binding-win32-x64-msvc': 0.46.0
 
-  oxlint-config-awesomeness@1.2.0(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(oxlint@1.61.0)(typescript@6.0.3):
+  oxlint-config-awesomeness@2.0.0(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.2.1(jiti@2.6.1))(oxlint@1.61.0)(typescript@6.0.3):
     dependencies:
       eslint-plugin-no-only-tests: 3.3.0
       eslint-plugin-perfectionist: 5.9.0(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3)

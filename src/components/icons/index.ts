@@ -1,11 +1,11 @@
-export { Code } from "./Code";
-export { Envelope } from "./Envelope";
-export { GitHub } from "./GitHub";
-export { ClappingHands } from "./ClappingHands";
-export { InformationSource } from "./InformationSource";
-export { PageCurl } from "./PageCurl";
-export { Phone } from "./Phone";
-export { SpeechBaloon } from "./SpeechBaloon";
-export { Twitter } from "./Twitter";
+export { Code } from "./code";
+export { Envelope } from "./envelope";
+export { GitHub } from "./github";
+export { ClappingHands } from "./clapping-hands";
+export { InformationSource } from "./information-source";
+export { PageCurl } from "./page-curl";
+export { Phone } from "./phone";
+export { SpeechBaloon } from "./speech-baloon";
+export { Twitter } from "./twitter";
 
 export type { IconProps } from "./types";

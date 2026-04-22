@@ -1,25 +1,26 @@
 "use client";
 
-import { useCallback, useRef, PointerEvent, ReactNode, useEffect } from "react";
+import type { ReactNode, PointerEvent } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../primitives/Button";
-import usePosition from "@/hooks/usePosition";
-import { useWindows } from "./WindowsContext";
+import { Button } from "@/components/primitives/button";
+import useWindows from "@/hooks/use-windows";
+import usePosition from "@/hooks/use-position";
 
 const TitleBarLines = ({ className }: { className?: string }) => (
   <div className={cn("flex flex-col gap-px flex-1", className)}>
     {Array.from({ length: 7 }).map((_, i) => (
-      <div key={i} className="h-px bg-white w-full" />
+      <div className="h-px bg-white w-full" key={i} />
     ))}
   </div>
 );
 
 const CloseButton = ({
-  slug,
   className,
+  slug,
 }: {
-  slug: string;
   className?: string;
+  slug: string;
 }) => {
   const { closeWindow } = useWindows();
 
@@ -30,14 +31,14 @@ const CloseButton = ({
   return (
     <Button
       aria-label="Close window"
-      onClick={handleClose}
-      onPointerDown={(e) => e.stopPropagation()}
-      size="windowControl"
-      variant="secondary"
       className={cn(
         "leading-0 text-[10px] aspect-square font-chicago-kare",
         className,
       )}
+      onClick={handleClose}
+      onPointerDown={(e) => e.stopPropagation()}
+      size="windowControl"
+      variant="secondary"
     >
       <span className="ml-px">x</span>
     </Button>
@@ -45,23 +46,23 @@ const CloseButton = ({
 };
 
 type WindowHeaderProps = {
-  title: string;
+  handlers: {
+    handlePointerDown: (e: PointerEvent) => void;
+    handlePointerMove: (e: PointerEvent) => void;
+    handlePointerUp: () => void;
+  };
   icon: ReactNode;
   slug: string;
-  handlers: {
-    onPointerDown: (e: PointerEvent) => void;
-    onPointerMove: (e: PointerEvent) => void;
-    onPointerUp: () => void;
-  };
+  title: string;
 };
 
-const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
+const WindowHeader = ({ handlers, icon, slug, title }: WindowHeaderProps) => {
   return (
     <div
       className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15 touch-none"
-      onPointerDown={handlers.onPointerDown}
-      onPointerMove={handlers.onPointerMove}
-      onPointerUp={handlers.onPointerUp}
+      onPointerDown={handlers.handlePointerDown}
+      onPointerMove={handlers.handlePointerMove}
+      onPointerUp={handlers.handlePointerUp}
     >
       <TitleBarLines className="max-w-7" />
 
@@ -82,25 +83,25 @@ const WindowHeader = ({ title, icon, slug, handlers }: WindowHeaderProps) => {
 };
 
 type WindowProps = {
-  title: string;
-  slug: string;
   children: ReactNode;
-  icon?: ReactNode;
   className?: string;
+  icon?: ReactNode;
+  slug: string;
+  title: string;
 };
 
-const Window = ({ title, slug, children, icon, className }: WindowProps) => {
+const Window = ({ children, className, icon, slug, title }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const { registerWindow, unregisterWindow, bringToFront, getZIndex, isOpen } =
+  const { bringToFront, getZIndex, isOpen, registerWindow, unregisterWindow } =
     useWindows();
 
   const open = isOpen(slug);
 
-  const { position, isDragging, handlers } = usePosition({
+  const { handlers, isDragging, position } = usePosition({
+    isOpen: open,
     slug,
     windowRef,
-    isOpen: open,
   });
 
   const zIndex = getZIndex(slug);
@@ -115,22 +116,22 @@ const Window = ({ title, slug, children, icon, className }: WindowProps) => {
 
   return (
     <div
-      ref={windowRef}
       className={cn(
         "w-max backdrop-blur-sm border border-white pixel-corners",
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
-      style={{
-        zIndex,
-        display: open ? undefined : "none",
-        ...(position != null
-          ? { left: position.x, top: position.y, position: "fixed" }
-          : { visibility: "hidden" }),
-      }}
       onPointerDown={() => bringToFront(slug)}
+      ref={windowRef}
+      style={{
+        display: open ? undefined : "none",
+        ...(position !== null
+          ? { left: position.x, position: "fixed", top: position.y }
+          : { visibility: "hidden" }),
+        zIndex,
+      }}
     >
-      <WindowHeader title={title} icon={icon} slug={slug} handlers={handlers} />
+      <WindowHeader handlers={handlers} icon={icon} slug={slug} title={title} />
 
       {children}
 

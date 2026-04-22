@@ -1,7 +1,9 @@
-import { ButtonWrapper } from "@/components/primitives/Button";
-import { HTMLAttributes } from "react";
-import { NAV_OPTIONS } from "./options";
-import NavLink from "./NavLink";
+import type { HTMLAttributes } from "react";
+
+import { ButtonWrapper } from "@/components/primitives/button";
+import { NAV_OPTIONS } from "@/components/navigation/options";
+import NavLink from "@/components/navigation/nav-link";
+
 import { cn } from "@/lib/utils";
 
 const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
@@ -12,10 +14,9 @@ const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     >
       <ButtonWrapper className="p-1.5">
         <div className="flex border-white border pixel-corners">
-          {NAV_OPTIONS.map(({ slug, icon: Icon, disabled }) => (
-            <div key={slug} className="not-first:border-l border-white">
+          {NAV_OPTIONS.map(({ disabled, icon: Icon, slug }) => (
+            <div className="not-first:border-l border-white" key={slug}>
               <NavLink
-                paramKey={slug}
                 className={cn(
                   "select-none shrink-0 items-center justify-center text-primary-foreground bg-transparent flex size-14",
                   disabled
@@ -23,6 +24,7 @@ const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
                     : "inset-shadow-footer active:inset-shadow-footer-active active:text-neutral-700 hover:bg-neutral-900/10",
                 )}
                 disabled={disabled}
+                paramKey={slug}
               >
                 <Icon className="size-6" strokeWidth={0.1} />
               </NavLink>

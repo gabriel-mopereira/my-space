@@ -6,7 +6,11 @@ import { cn } from "@/lib/utils";
 
 const hexToRgb = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return [1, 1, 1];
+
+  if (!result) {
+    return [1, 1, 1];
+  }
+
   return [
     parseInt(result[1], 16) / 255,
     parseInt(result[2], 16) / 255,
@@ -105,111 +109,173 @@ void main(){
 }
 `;
 
+const createRenderer = (container) => {
+  const renderer = new Renderer({
+    alpha: true,
+    antialias: false,
+    dpr: Math.min(window.devicePixelRatio || 1, 2),
+    webgl: 2,
+  });
+
+  const { canvas } = renderer.gl;
+
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
+  canvas.style.display = "block";
+
+  container.appendChild(canvas);
+
+  return {
+    canvas,
+    gl: renderer.gl,
+    renderer,
+  };
+};
+
+const buildUniforms = (props) => ({
+  iResolution: { value: new Float32Array([1, 1]) },
+  iTime: { value: 0 },
+  uBlendAngle: { value: props.blendAngle },
+  uBlendSoftness: { value: props.blendSoftness },
+  uCenterOffset: { value: new Float32Array([props.centerX, props.centerY]) },
+  uColor1: { value: new Float32Array(hexToRgb(props.color1)) },
+  uColor2: { value: new Float32Array(hexToRgb(props.color2)) },
+  uColor3: { value: new Float32Array(hexToRgb(props.color3)) },
+  uColorBalance: { value: props.colorBalance },
+  uContrast: { value: props.contrast },
+  uGamma: { value: props.gamma },
+  uGrainAmount: { value: props.grainAmount },
+  uGrainAnimated: { value: props.grainAnimated ? 1.0 : 0.0 },
+  uGrainScale: { value: props.grainScale },
+  uNoiseScale: { value: props.noiseScale },
+  uRotationAmount: { value: props.rotationAmount },
+  uSaturation: { value: props.saturation },
+  uTimeSpeed: { value: props.timeSpeed },
+  uWarpAmplitude: { value: props.warpAmplitude },
+  uWarpFrequency: { value: props.warpFrequency },
+  uWarpSpeed: { value: props.warpSpeed },
+  uWarpStrength: { value: props.warpStrength },
+  uZoom: { value: props.zoom },
+});
+
+const createMesh = (gl, uniforms) => {
+  const geometry = new Triangle(gl);
+  const program = new Program(gl, {
+    fragment,
+    uniforms,
+    vertex,
+  });
+
+  return { mesh: new Mesh(gl, { geometry, program }), program };
+};
+
+const observeResize = (container, renderer, program, gl) => {
+  const setSize = () => {
+    const rect = container.getBoundingClientRect();
+    const width = Math.max(1, Math.floor(rect.width));
+    const height = Math.max(1, Math.floor(rect.height));
+
+    renderer.setSize(width, height);
+
+    const res = program.uniforms.iResolution.value;
+
+    res[0] = gl.drawingBufferWidth;
+    res[1] = gl.drawingBufferHeight;
+  };
+
+  const ro = new ResizeObserver(setSize);
+  ro.observe(container);
+  setSize();
+
+  return { disconnect: () => ro.disconnect() };
+};
+
+const startAnimationLoop = (renderer, mesh, program) => {
+  let raf = 0;
+
+  const t0 = performance.now();
+  const loop = (t) => {
+    program.uniforms.iTime.value = (t - t0) * 0.001;
+    renderer.render({ scene: mesh });
+    raf = requestAnimationFrame(loop);
+  };
+
+  raf = requestAnimationFrame(loop);
+
+  return { cancel: () => cancelAnimationFrame(raf) };
+};
+
+// oxlint-disable-next-line max-lines-per-function
 const Grainient = ({
-  timeSpeed = 0.25,
-  colorBalance = 0.0,
-  warpStrength = 1.0,
-  warpFrequency = 5.0,
-  warpSpeed = 2.0,
-  warpAmplitude = 50.0,
   blendAngle = 0.0,
   blendSoftness = 0.05,
-  rotationAmount = 500.0,
-  noiseScale = 2.0,
-  grainAmount = 0.1,
-  grainScale = 2.0,
-  grainAnimated = false,
-  contrast = 1.5,
-  gamma = 1.0,
-  saturation = 1.0,
   centerX = 0.0,
   centerY = 0.0,
-  zoom = 0.9,
+  className = "",
   color1 = "#FF9FFC",
   color2 = "#5227FF",
   color3 = "#B19EEF",
-  className = "",
+  colorBalance = 0.0,
+  contrast = 1.5,
+  gamma = 1.0,
+  grainAmount = 0.1,
+  grainAnimated = false,
+  grainScale = 2.0,
+  noiseScale = 2.0,
+  rotationAmount = 500.0,
+  saturation = 1.0,
+  timeSpeed = 0.25,
+  warpAmplitude = 50.0,
+  warpFrequency = 5.0,
+  warpSpeed = 2.0,
+  warpStrength = 1.0,
+  zoom = 0.9,
 }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const renderer = new Renderer({
-      webgl: 2,
-      alpha: true,
-      antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
-    });
-
-    const gl = renderer.gl;
-    const canvas = gl.canvas;
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.display = "block";
+    if (!containerRef.current) {
+      return;
+    }
 
     const container = containerRef.current;
-    container.appendChild(canvas);
 
-    const geometry = new Triangle(gl);
-    const program = new Program(gl, {
-      vertex,
-      fragment,
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new Float32Array([1, 1]) },
-        uTimeSpeed: { value: timeSpeed },
-        uColorBalance: { value: colorBalance },
-        uWarpStrength: { value: warpStrength },
-        uWarpFrequency: { value: warpFrequency },
-        uWarpSpeed: { value: warpSpeed },
-        uWarpAmplitude: { value: warpAmplitude },
-        uBlendAngle: { value: blendAngle },
-        uBlendSoftness: { value: blendSoftness },
-        uRotationAmount: { value: rotationAmount },
-        uNoiseScale: { value: noiseScale },
-        uGrainAmount: { value: grainAmount },
-        uGrainScale: { value: grainScale },
-        uGrainAnimated: { value: grainAnimated ? 1.0 : 0.0 },
-        uContrast: { value: contrast },
-        uGamma: { value: gamma },
-        uSaturation: { value: saturation },
-        uCenterOffset: { value: new Float32Array([centerX, centerY]) },
-        uZoom: { value: zoom },
-        uColor1: { value: new Float32Array(hexToRgb(color1)) },
-        uColor2: { value: new Float32Array(hexToRgb(color2)) },
-        uColor3: { value: new Float32Array(hexToRgb(color3)) },
-      },
-    });
+    const { canvas, gl, renderer } = createRenderer(container);
+    const { mesh, program } = createMesh(
+      gl,
+      buildUniforms({
+        blendAngle,
+        blendSoftness,
+        centerX,
+        centerY,
+        color1,
+        color2,
+        color3,
+        colorBalance,
+        contrast,
+        gamma,
+        grainAmount,
+        grainAnimated,
+        grainScale,
+        noiseScale,
+        rotationAmount,
+        saturation,
+        timeSpeed,
+        warpAmplitude,
+        warpFrequency,
+        warpSpeed,
+        warpStrength,
+        zoom,
+      }),
+    );
 
-    const mesh = new Mesh(gl, { geometry, program });
-
-    const setSize = () => {
-      const rect = container.getBoundingClientRect();
-      const width = Math.max(1, Math.floor(rect.width));
-      const height = Math.max(1, Math.floor(rect.height));
-      renderer.setSize(width, height);
-      const res = program.uniforms.iResolution.value;
-      res[0] = gl.drawingBufferWidth;
-      res[1] = gl.drawingBufferHeight;
-    };
-
-    const ro = new ResizeObserver(setSize);
-    ro.observe(container);
-    setSize();
-
-    let raf = 0;
-    const t0 = performance.now();
-    const loop = (t) => {
-      program.uniforms.iTime.value = (t - t0) * 0.001;
-      renderer.render({ scene: mesh });
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+    const ro = observeResize(container, renderer, program, gl);
+    const raf = startAnimationLoop(renderer, mesh, program);
 
     return () => {
-      cancelAnimationFrame(raf);
+      raf.cancel();
       ro.disconnect();
+
       try {
         container.removeChild(canvas);
       } catch {
@@ -217,34 +283,35 @@ const Grainient = ({
       }
     };
   }, [
-    timeSpeed,
-    colorBalance,
-    warpStrength,
-    warpFrequency,
-    warpSpeed,
-    warpAmplitude,
     blendAngle,
     blendSoftness,
-    rotationAmount,
-    noiseScale,
-    grainAmount,
-    grainScale,
-    grainAnimated,
-    contrast,
-    gamma,
-    saturation,
     centerX,
     centerY,
-    zoom,
     color1,
     color2,
     color3,
+    colorBalance,
+    contrast,
+    containerRef,
+    gamma,
+    grainAmount,
+    grainAnimated,
+    grainScale,
+    noiseScale,
+    rotationAmount,
+    saturation,
+    timeSpeed,
+    warpAmplitude,
+    warpFrequency,
+    warpSpeed,
+    warpStrength,
+    zoom,
   ]);
 
   return (
     <div
-      ref={containerRef}
       className={cn("relative w-full h-full overflow-hidden", className)}
+      ref={containerRef}
     />
   );
 };

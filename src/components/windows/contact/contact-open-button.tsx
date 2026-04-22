@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, ButtonWrapper } from "@/components/primitives/Button";
+import { Button, ButtonWrapper } from "@/components/primitives/button";
 
 const ContactOpenButton = ({
   baseUrl,
