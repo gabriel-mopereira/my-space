@@ -123,7 +123,7 @@ const createRenderer = (container) => {
   canvas.style.height = "100%";
   canvas.style.display = "block";
 
-  container.appendChild(canvas);
+  container.append(canvas);
 
   return {
     canvas,
@@ -276,11 +276,7 @@ const Grainient = ({
       raf.cancel();
       ro.disconnect();
 
-      try {
-        container.removeChild(canvas);
-      } catch {
-        // Ignore
-      }
+      canvas.remove();
     };
   }, [
     blendAngle,
