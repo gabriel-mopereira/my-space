@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -15,7 +17,6 @@
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
     "ogl": "^1.0.11",
-    "oxlint": "^1.61.0",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "shadcn": "^4.4.0",
@@ -28,12 +29,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "^10.2.1",
-    "eslint-config-next": "16.2.4",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-perfectionist": "^5.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-unused-imports": "^4.4.1",
+    "oxfmt": "^0.46.0",
+    "oxlint": "^1.61.0",
     "oxlint-config-awesomeness": "^1.2.0",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3"
