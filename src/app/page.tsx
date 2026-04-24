@@ -1,10 +1,16 @@
 import { InformationSource, SpeechBaloon } from "@/components/icons";
-import Window from "@/components/windows/window";
+import {
+  Window,
+  WindowContent,
+  WindowFooter,
+  WindowHeader,
+} from "@/components/windows/window";
 import Header from "@/components/navigation/header";
-import AboutContent from "@/components/windows/about/about-content";
-import ContactContent from "@/components/windows/contact/contact-content";
+import AboutContent from "@/components/windows/about-content";
+import ContactContent from "@/components/windows/contact-content";
 import Footer from "@/components/navigation/footer";
 import WindowsProvider from "@/components/windows/context/windows-provider";
+import WindowsUrlSync from "@/components/windows/windows-url-sync";
 import { NAV_OPTIONS } from "@/components/navigation/options";
 
 const getInitialOpen = (params: SearchParams): Array<string> => {
@@ -32,28 +38,38 @@ const Page = async ({
 
   return (
     <WindowsProvider initialOpen={initialOpen}>
+      <WindowsUrlSync />
+
       <div className="relative text-white font-ibm-plex">
         <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
 
         <Footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden" />
 
         <div className="relative flex-1">
-          <Window
-            className="max-w-94 md:max-w-2xl"
-            icon={<InformationSource size={16} strokeWidth={0.3} />}
-            slug="about"
-            title="About me"
-          >
-            <AboutContent />
+          <Window className="max-w-94 md:max-w-2xl" slug="about">
+            <WindowHeader
+              icon={<InformationSource size={16} strokeWidth={0.3} />}
+              title="About me"
+            />
+
+            <WindowContent>
+              <AboutContent />
+            </WindowContent>
+
+            <WindowFooter />
           </Window>
 
-          <Window
-            className="max-w-85 md:max-w-md"
-            icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
-            slug="contact"
-            title="Contact"
-          >
-            <ContactContent />
+          <Window className="max-w-85 md:max-w-md" slug="contact">
+            <WindowHeader
+              icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
+              title="Contact"
+            />
+
+            <WindowContent>
+              <ContactContent />
+            </WindowContent>
+
+            <WindowFooter />
           </Window>
         </div>
       </div>
