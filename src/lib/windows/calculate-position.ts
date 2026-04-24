@@ -22,19 +22,21 @@ const calculatePosition = (
     return position;
   }
 
-  while (positions.some((pos) => isNear(position, pos))) {
+  const maxX = Math.max(0, window.innerWidth - windowRef.current.clientWidth);
+  const maxY = Math.max(0, window.innerHeight - windowRef.current.clientHeight);
+
+  let safety = positions.length + 1;
+  while (safety-- > 0 && positions.some((pos) => isNear(position, pos))) {
     position.x += CASCADE_OFFSET;
     position.y += CASCADE_OFFSET;
-  }
 
-  position.x = Math.max(
-    0,
-    Math.min(position.x, window.innerWidth - windowRef.current.clientWidth),
-  );
-  position.y = Math.max(
-    0,
-    Math.min(position.y, window.innerHeight - windowRef.current.clientHeight),
-  );
+    if (position.x > maxX) {
+      position.x = position.x % Math.max(1, maxX) || CASCADE_OFFSET;
+    }
+    if (position.y > maxY) {
+      position.y = position.y % Math.max(1, maxY) || CASCADE_OFFSET;
+    }
+  }
 
   return position;
 };
