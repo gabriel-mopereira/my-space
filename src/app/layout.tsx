@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import { IBM_Plex_Mono as ibmPlexMono } from "next/font/google";
+import {
+  DotGothic16 as dotGothic16,
+  IBM_Plex_Mono as ibmPlexMono,
+} from "next/font/google";
 import localFont from "next/font/local";
 
 import Background from "@/components/effects/background";
 
 import "@/styles/globals.css";
-
-const ibmPlex = ibmPlexMono({
-  subsets: ["latin"],
-  variable: "--font-ibm-plex",
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
-});
 
 const chicagoKare = localFont({
   src: [
@@ -30,6 +27,17 @@ const chicagoKare = localFont({
   variable: "--font-chicago-kare",
 });
 
+const dotGothic = dotGothic16({
+  variable: "--font-dot-gothic-16",
+  weight: ["400"],
+});
+
+const ibmPlex = ibmPlexMono({
+  subsets: ["latin"],
+  variable: "--font-ibm-plex",
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   description: "Gabriel's corner of the web",
   title: "Gabriel Pereira - Software Engineer",
@@ -41,7 +49,7 @@ const RootLayout = ({
   children: ReactNode;
 }>) => (
   <html
-    className={`h-full antialiased ${ibmPlex.variable} ${chicagoKare.variable}`}
+    className={`h-full antialiased ${ibmPlex.variable} ${chicagoKare.variable} ${dotGothic.variable}`}
     lang="en"
   >
     <body className="h-full overflow-hidden flex flex-col">

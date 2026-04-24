@@ -22,6 +22,7 @@
     /* Typography */
     --font-ibm-plex: var(--font-ibm-plex);
     --font-chicago-kare: var(--font-chicago-kare);
+    --font-dot-gothic-16: var(--font-dot-gothic-16);
 
     /* Colors */
     --color-background: var(--background);
