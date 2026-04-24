@@ -9,8 +9,6 @@ const ContactOpenButton = ({
   baseUrl: string;
   username: string;
 }) => {
-  "use client";
-
   const handleClick = () => {
     window.open(`${baseUrl}${username}`, "_blank");
   };

@@ -1,7 +1,7 @@
 import { Envelope, GitHub, Phone, Twitter } from "@/components/icons";
-import ContactOpenButton from "@/components/windows/contact/contact-open-button";
+import ContactOpenButton from "@/components/windows/contact-open-button";
 
-const CONTACT_INFO = [
+const CONTACT_OPTIONS = [
   {
     baseUrl: "https://github.com/",
     icon: GitHub,
@@ -42,7 +42,7 @@ const ContactContent = () => (
       <div className="col-span-9 px-2 inset-shadow-header">Username</div>
     </div>
 
-    {CONTACT_INFO.map(({ baseUrl, icon: Icon, label, slug, username }) => (
+    {CONTACT_OPTIONS.map(({ baseUrl, icon: Icon, label, slug, username }) => (
       <div
         className="grid-cols-12 grid bg-secondary/30 not-first:mb-0.5 items-center"
         key={slug}
