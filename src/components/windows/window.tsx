@@ -92,7 +92,7 @@ const CloseButton = () => {
   return (
     <Button
       aria-label="Close window"
-      className="leading-0 text-[10px] aspect-square font-chicago-kare"
+      className="leading-0 text-[10px] aspect-square font-chicago-kare ml-3"
       onClick={handleClose}
       onPointerDown={(e) => e.stopPropagation()}
       size="windowControl"
@@ -104,17 +104,26 @@ const CloseButton = () => {
 };
 
 type WindowHeaderProps = {
+  className?: string;
   closeable?: boolean;
   icon?: ReactNode;
-  title: string;
+  title?: string;
 };
 
-const WindowHeader = ({ closeable = true, icon, title }: WindowHeaderProps) => {
+const WindowHeader = ({
+  className,
+  closeable = true,
+  icon,
+  title,
+}: WindowHeaderProps) => {
   const { handlers } = useWindowInstance();
 
   return (
     <div
-      className="flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15 touch-none"
+      className={cn(
+        "flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15 touch-none font-chicago-kare",
+        className,
+      )}
       onPointerDown={handlers.handlePointerDown}
       onPointerMove={handlers.handlePointerMove}
       onPointerUp={handlers.handlePointerUp}
@@ -123,14 +132,20 @@ const WindowHeader = ({ closeable = true, icon, title }: WindowHeaderProps) => {
 
       <TitleBarLines />
 
-      <div className="flex items-center gap-2 px-3">
-        {icon && <span className="mb-0.5">{icon}</span>}
-        <p className="text-xl md:text-2xl leading-4.5 font-chicago-kare whitespace-nowrap">
-          {title}
-        </p>
-      </div>
+      {(title || icon) && (
+        <>
+          <div className="flex items-center gap-2 px-3">
+            {icon && <span className="mb-0.5">{icon}</span>}
+            {title && (
+              <p className="text-xl md:text-2xl leading-4.5 whitespace-nowrap">
+                {title}
+              </p>
+            )}
+          </div>
 
-      <TitleBarLines className="pr-3" />
+          <TitleBarLines />
+        </>
+      )}
 
       {closeable && <CloseButton />}
     </div>
