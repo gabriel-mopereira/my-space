@@ -40,7 +40,7 @@ const NotFound = () => {
             <Image alt="Not Found" src={Pool} />
 
             <div className="absolute inset-0 flex flex-col justify-between p-4">
-              <p className="text-base md:text-lg leading-tight max-w-60 [text-shadow:1px_1px_0_rgb(0_0_0_/55%)] font-chicago-kare">
+              <p className="text-base md:text-lg leading-tight max-w-60 font-medium [text-shadow:1px_1px_0_rgb(0_0_0_/55%)] font-chicago-kare">
                 You found yourself too far away from home. Do you wish to go
                 back to a familiar place?
               </p>
@@ -67,7 +67,7 @@ const NotFound = () => {
         <Window className="w-75" key={slug} slug={slug}>
           <WindowHeader />
 
-          <WindowContent className="p-4 text-sm space-y-2 font-semibold">
+          <WindowContent className="p-4 text-sm space-y-2">
             <p>Sorry, a system error occurred.</p>
             <p>The page you requested was not found. Please try again later.</p>
           </WindowContent>
