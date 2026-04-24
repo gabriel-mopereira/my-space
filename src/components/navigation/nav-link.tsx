@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Button } from "@/components/primitives/button";
-import useWindows from "@/hooks/use-windows";
+import useWindowsActions from "@/hooks/windows/use-windows-actions";
 
 type NavLinkProps = {
   children: ReactNode;
@@ -12,7 +12,7 @@ type NavLinkProps = {
 };
 
 const NavLink = ({ children, className, disabled, paramKey }: NavLinkProps) => {
-  const { toggleWindow } = useWindows();
+  const { toggleWindow } = useWindowsActions();
 
   return (
     <Button
