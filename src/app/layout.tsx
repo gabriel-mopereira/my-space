@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import { IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono as ibmPlexMono } from "next/font/google";
 import localFont from "next/font/local";
 
-import Background from "@/components/background";
+import Background from "@/components/effects/background";
 
 import "@/styles/globals.css";
 
-// eslint-disable-next-line
-const ibmPlex = IBM_Plex_Mono({
+const ibmPlex = ibmPlexMono({
   subsets: ["latin"],
   variable: "--font-ibm-plex",
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -46,7 +45,7 @@ const RootLayout = ({
     lang="en"
   >
     <body className="h-full overflow-hidden flex flex-col">
-      <main className="relative flex flex-col min-h-[130vh] md:min-h-full bg-background">
+      <main className="relative min-h-[130vh] md:min-h-full bg-background text-white">
         <Background />
         {children}
       </main>

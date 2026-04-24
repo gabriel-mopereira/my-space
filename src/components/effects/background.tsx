@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Grainient from "@/components/grainient";
+import Grainient from "@/components/effects/grainient";
 
 const Background = () => {
   useEffect(() => {
