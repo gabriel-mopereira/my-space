@@ -205,7 +205,6 @@ const startAnimationLoop = (renderer, mesh, program) => {
   return { cancel: () => cancelAnimationFrame(raf) };
 };
 
-// oxlint-disable-next-line max-lines-per-function
 const Grainient = ({
   blendAngle = 0.0,
   blendSoftness = 0.05,
