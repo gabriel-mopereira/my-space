@@ -16,6 +16,11 @@
     [role="button"]:not(:disabled) {
         cursor: pointer;
     }
+
+    html.windows-animating,
+    html.windows-animating * {
+        cursor: wait !important;
+    }
 }
 
 @theme inline {

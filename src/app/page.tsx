@@ -9,6 +9,7 @@ import Header from "@/components/navigation/header";
 import AboutContent from "@/components/windows/about-content";
 import ContactContent from "@/components/windows/contact-content";
 import Footer from "@/components/navigation/footer";
+import WindowAnimationOverlay from "@/components/windows/window-animation-overlay";
 import WindowsProvider from "@/components/windows/context/windows-provider";
 import WindowsUrlSync from "@/components/windows/windows-url-sync";
 import { NAV_OPTIONS } from "@/components/navigation/options";
@@ -38,6 +39,8 @@ const Page = async ({
 
   return (
     <WindowsProvider initialOpen={initialOpen}>
+      <WindowAnimationOverlay />
+
       <WindowsUrlSync />
 
       <div className="relative text-white font-ibm-plex">

@@ -1,7 +1,14 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { createContext, useCallback, useContext, useMemo, useRef } from "react";
+import type { ReactNode, RefObject } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 
 import type { WindowHandlers } from "@/types/windows";
 
@@ -11,12 +18,18 @@ import { TitleBarLines } from "@/components/windows/chrome";
 
 import useIsOpen from "@/hooks/windows/use-is-open";
 import usePosition from "@/hooks/windows/use-position";
+import { useWindowAnimation } from "@/hooks/windows/use-window-animation";
 import useWindowsActions from "@/hooks/windows/use-windows-actions";
 import useZIndex from "@/hooks/windows/use-z-index";
+import {
+  findVisibleShortcutRect,
+  prefersReducedMotion,
+} from "@/lib/windows/resolve-animation-rects";
 
 type WindowInstanceContext = {
   handlers: WindowHandlers;
   slug: string;
+  windowRef: RefObject<HTMLDivElement | null>;
 };
 
 const WindowInstanceContext = createContext<WindowInstanceContext | null>(null);
@@ -40,10 +53,11 @@ type WindowProps = {
 const Window = ({ children, className, slug }: WindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const { bringToFront } = useWindowsActions();
+  const { bringToFront, setAnimationTargetRect } = useWindowsActions();
 
   const open = useIsOpen(slug);
   const zIndex = useZIndex(slug);
+  const animation = useWindowAnimation(slug);
 
   const { handlers, isDragging, position } = usePosition({
     isOpen: open,
@@ -51,11 +65,32 @@ const Window = ({ children, className, slug }: WindowProps) => {
     windowRef,
   });
 
+  const needsOpeningTarget =
+    animation?.direction === "opening" && animation.targetRect === null;
+
+  useEffect(() => {
+    if (!needsOpeningTarget || !position || !windowRef.current) {
+      return;
+    }
+
+    setAnimationTargetRect(slug, {
+      height: windowRef.current.offsetHeight,
+      width: windowRef.current.offsetWidth,
+      x: position.x,
+      y: position.y,
+    });
+  }, [needsOpeningTarget, position, setAnimationTargetRect, slug]);
+
   const handleBringToFront = useCallback(() => {
     bringToFront(slug);
   }, [bringToFront, slug]);
 
-  const value = useMemo(() => ({ handlers, slug }), [handlers, slug]);
+  const value = useMemo(
+    () => ({ handlers, slug, windowRef }),
+    [handlers, slug],
+  );
+
+  const hiddenForAnimation = animation !== null;
 
   return (
     <div
@@ -64,6 +99,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
+      data-window-slug={slug}
       onPointerDown={handleBringToFront}
       ref={windowRef}
       style={{
@@ -71,6 +107,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
         ...(position !== null
           ? { left: position.x, position: "fixed", top: position.y }
           : { visibility: "hidden" }),
+        ...(hiddenForAnimation ? { visibility: "hidden" } : null),
         zIndex,
       }}
     >
@@ -82,12 +119,34 @@ const Window = ({ children, className, slug }: WindowProps) => {
 };
 
 const CloseButton = () => {
-  const { slug } = useWindowInstance();
+  const { slug, windowRef } = useWindowInstance();
   const { closeWindow } = useWindowsActions();
 
   const handleClose = useCallback(() => {
+    if (prefersReducedMotion() || !windowRef.current) {
+      closeWindow(slug);
+
+      return;
+    }
+
+    const bounds = windowRef.current.getBoundingClientRect();
+    const windowRect = {
+      height: bounds.height,
+      width: bounds.width,
+      x: bounds.left,
+      y: bounds.top,
+    };
+
+    const shortcutRect = findVisibleShortcutRect(slug);
+
+    if (shortcutRect) {
+      closeWindow(slug, shortcutRect, windowRect);
+
+      return;
+    }
+
     closeWindow(slug);
-  }, [closeWindow, slug]);
+  }, [closeWindow, slug, windowRef]);
 
   return (
     <Button
