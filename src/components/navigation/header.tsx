@@ -9,24 +9,25 @@ const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div {...props}>
       {NAV_OPTIONS.map(({ disabled, icon: Icon, label, slug }) => (
-        <NavLink
-          className={cn(
-            "font-chicago-kare flex-1 not-first:border-l border-white flex justify-between items-center px-2 py-0.5 leading-5 text-xl select-none",
-            disabled
-              ? "*:opacity-50 pointer-events-none"
-              : "inset-shadow-header active:inset-shadow-header-active active:text-neutral-700 hover:bg-neutral-900/10",
-          )}
-          disabled={disabled}
-          key={slug}
-          paramKey={slug}
-        >
-          <span>
-            <span className="underline">{label[0]}</span>
-            {label.slice(1)}
-          </span>
+        <div className="flex-1" key={slug}>
+          <NavLink
+            className={cn(
+              "font-chicago-kare w-full flex justify-between items-center px-2 py-0.5 leading-5 text-xl select-none",
+              disabled
+                ? "*:opacity-50 pointer-events-none"
+                : "inset-shadow-header active:inset-shadow-header-active active:text-neutral-700 hover:bg-neutral-900/10",
+            )}
+            disabled={disabled}
+            paramKey={slug}
+          >
+            <span>
+              <span className="underline">{label[0]}</span>
+              {label.slice(1)}
+            </span>
 
-          <Icon size={16} strokeWidth={0.3} />
-        </NavLink>
+            <Icon size={16} strokeWidth={0.3} />
+          </NavLink>
+        </div>
       ))}
     </div>
   );

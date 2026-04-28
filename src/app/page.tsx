@@ -44,7 +44,7 @@ const Page = async ({
       <WindowsUrlSync />
 
       <div className="relative text-white font-ibm-plex">
-        <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm" />
+        <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm divide-white divide-x" />
 
         <Footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden" />
 
