@@ -10,6 +10,12 @@
 
     body {
         @apply bg-background text-foreground font-ibm-plex;
+        font-synthesis: none;
+    }
+
+    .font-chicago-kare {
+        -webkit-font-smoothing: none;
+        font-smooth: never;
     }
 
     button:not(:disabled),
