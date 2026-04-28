@@ -14,14 +14,14 @@ type PositionRegistryProviderProps = {
 const PositionRegistryProvider = ({
   children,
 }: PositionRegistryProviderProps) => {
-  const positions = useRef<Record<string, Position>>({});
+  const positions = useRef<Map<string, Position>>(new Map());
 
   const registerPosition = useCallback((slug: string, position: Position) => {
-    positions.current[slug] = position;
+    positions.current.set(slug, position);
   }, []);
 
   const unregisterPosition = useCallback((slug: string) => {
-    delete positions.current[slug];
+    positions.current.delete(slug);
   }, []);
 
   const getPositions = useCallback(() => positions.current, []);

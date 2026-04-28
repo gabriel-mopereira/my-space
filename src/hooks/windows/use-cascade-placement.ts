@@ -7,7 +7,7 @@ import type { Position } from "@/types/windows";
 import calculatePosition from "@/lib/windows/calculate-position";
 
 type PositionRegistry = {
-  getPositions: () => Record<string, Position>;
+  getPositions: () => Map<string, Position>;
   registerPosition: (slug: string, position: Position) => void;
   unregisterPosition: (slug: string) => void;
 };
@@ -42,7 +42,7 @@ const useCascadePlacement = ({
     const positions = getPositions();
 
     const initialPosition = calculatePosition(
-      Object.values(positions),
+      [...positions.values()],
       windowRef as RefObject<HTMLDivElement>,
     );
 

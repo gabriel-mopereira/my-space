@@ -5,7 +5,7 @@ import { createContext } from "react";
 import type { Position } from "@/types/windows";
 
 type PositionRegistryContext = {
-  getPositions: () => Record<string, Position>;
+  getPositions: () => Map<string, Position>;
   registerPosition: (slug: string, position: Position) => void;
   unregisterPosition: (slug: string) => void;
 };
