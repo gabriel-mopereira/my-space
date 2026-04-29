@@ -17,19 +17,19 @@ const AboutContent = () => (
     </div>
 
     <div className="space-y-2 md:space-y-4">
-      <span className="inline-flex md:flex-col underline decoration-1 underline-offset-2 text-3xl md:text-5xl">
+      <h1 className="inline-flex md:flex-col underline decoration-1 underline-offset-2 text-3xl md:text-5xl">
         <span className="md:block">Hello, </span>
         <span className="inline-flex items-center">
           I&apos;m Gabriel!
           <ClappingHands className="size-6 md:size-8 inline ml-2" />
         </span>
-      </span>
+      </h1>
 
-      <p className="font-medium text-sm md:text-base">
+      <h2 className="font-medium text-sm md:text-base">
         Full-stack developer working with TypeScript, React, and Next.js. I
         enjoy building performant web applications and writing code that&apos;s
         clean and maintainable.
-      </p>
+      </h2>
     </div>
   </div>
 );
