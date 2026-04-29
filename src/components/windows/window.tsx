@@ -92,16 +92,31 @@ const Window = ({ children, className, slug }: WindowProps) => {
 
   const hiddenForAnimation = animation !== null;
 
+  useEffect(() => {
+    if (!open || hiddenForAnimation || !windowRef.current) {
+      return;
+    }
+
+    if (windowRef.current.contains(document.activeElement)) {
+      return;
+    }
+
+    windowRef.current.focus({ preventScroll: true });
+  }, [open, hiddenForAnimation]);
+
   return (
     <div
+      aria-labelledby={`window-${slug}-title`}
       className={cn(
-        "w-max backdrop-blur-sm border border-white shadow-window",
+        "w-max backdrop-blur-sm border border-white shadow-window outline-none",
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
       data-window-slug={slug}
+      onFocus={handleBringToFront}
       onPointerDown={handleBringToFront}
       ref={windowRef}
+      role="dialog"
       style={{
         display: open ? undefined : "none",
         ...(position !== null
@@ -110,6 +125,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
         ...(hiddenForAnimation ? { visibility: "hidden" } : null),
         zIndex,
       }}
+      tabIndex={-1}
     >
       <WindowInstanceContext.Provider value={value}>
         {children}
@@ -157,7 +173,7 @@ const CloseButton = () => {
       size="windowControl"
       variant="secondary"
     >
-      <span className="ml-px">x</span>
+      <span aria-hidden="true" className="ml-px">x</span>
     </Button>
   );
 };
@@ -175,7 +191,7 @@ const WindowHeader = ({
   icon,
   title,
 }: WindowHeaderProps) => {
-  const { handlers } = useWindowInstance();
+  const { handlers, slug } = useWindowInstance();
 
   return (
     <div
@@ -196,9 +212,12 @@ const WindowHeader = ({
           <div className="flex items-center gap-2 px-3">
             {icon && <span className="mb-0.5">{icon}</span>}
             {title && (
-              <p className="text-xl md:text-2xl leading-4.5 whitespace-nowrap">
+              <h2
+                className="text-xl md:text-2xl leading-4.5 whitespace-nowrap font-normal"
+                id={`window-${slug}-title`}
+              >
                 {title}
-              </p>
+              </h2>
             )}
           </div>
 
