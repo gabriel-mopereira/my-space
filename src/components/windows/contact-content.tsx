@@ -55,7 +55,11 @@ const ContactContent = () => (
         <div className="col-span-9 flex items-center justify-between px-1 md:px-2 gap-1 md:gap-4">
           <span className="text-sm md:text-base">{username}</span>
 
-          <ContactOpenButton baseUrl={baseUrl} username={username} />
+          <ContactOpenButton
+            baseUrl={baseUrl}
+            label={label}
+            username={username}
+          />
         </div>
       </div>
     ))}
