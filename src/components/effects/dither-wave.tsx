@@ -301,7 +301,44 @@ const DitherWave: React.FC<DitherWaveProps> = ({
       renderer.render(scene, camera);
     };
 
-    rafRef.current = requestAnimationFrame(animate);
+    const reducedMotionQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    renderer.render(scene, camera);
+
+    const startLoop = () => {
+      if (rafRef.current) {
+        return;
+      }
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    const stopLoop = () => {
+      if (!rafRef.current) {
+        return;
+      }
+
+      cancelAnimationFrame(rafRef.current);
+
+      rafRef.current = 0;
+      startTimeRef.current = 0;
+    };
+
+    if (!reducedMotionQuery.matches) {
+      startLoop();
+    }
+
+    const handleReducedMotionChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        stopLoop();
+        return;
+      }
+
+      startLoop();
+    };
+
+    reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
 
     const handleResize = () => {
       const newRect = container.getBoundingClientRect();
@@ -319,6 +356,10 @@ const DitherWave: React.FC<DitherWaveProps> = ({
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      reducedMotionQuery.removeEventListener(
+        "change",
+        handleReducedMotionChange,
+      );
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
