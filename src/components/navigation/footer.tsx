@@ -21,7 +21,7 @@ const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
                   "select-none shrink-0 items-center justify-center text-primary-foreground bg-transparent flex size-14",
                   disabled
                     ? "*:opacity-50 pointer-events-none"
-                    : "inset-shadow-footer active:inset-shadow-footer-active active:text-neutral-700 hover:bg-neutral-900/10",
+                    : "inset-shadow-bevel-thick active:inset-shadow-bevel-thick-pressed active:text-neutral-700 hover:bg-neutral-900/10",
                 )}
                 disabled={disabled}
                 paramKey={slug}

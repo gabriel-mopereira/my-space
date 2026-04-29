@@ -95,7 +95,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
   return (
     <div
       className={cn(
-        "w-max backdrop-blur-sm border border-white pixel-corners",
+        "w-max backdrop-blur-sm border border-white shadow-window",
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
@@ -151,7 +151,7 @@ const CloseButton = () => {
   return (
     <Button
       aria-label="Close window"
-      className="leading-0 text-[10px] aspect-square font-chicago-kare ml-3"
+      className="leading-0 text-[10px] aspect-square font-chicago-kare ml-3 shadow-bevel-outer"
       onClick={handleClose}
       onPointerDown={(e) => e.stopPropagation()}
       size="windowControl"
@@ -180,7 +180,7 @@ const WindowHeader = ({
   return (
     <div
       className={cn(
-        "flex items-center p-2 border-b border-white select-none inset-shadow-header cursor-grab active:cursor-grabbing bg-primary/15 touch-none font-chicago-kare",
+        "flex items-center p-2 border-b border-white select-none inset-shadow-bevel cursor-grab active:cursor-grabbing bg-primary/15 touch-none font-chicago-kare",
         className,
       )}
       onPointerDown={handlers.handlePointerDown}
@@ -217,11 +217,11 @@ type WindowContentProps = {
 };
 
 const WindowContent = ({ children, className }: WindowContentProps) => (
-  <div className={className}>{children}</div>
+  <div className={cn("inset-shadow-bevel", className)}>{children}</div>
 );
 
 const WindowFooter = () => (
-  <div className="h-5 inset-shadow-header border-t border-border bg-primary/15" />
+  <div className="h-5 inset-shadow-bevel border-t border-border bg-primary/15" />
 );
 
 export { TitleBarLines, Window, WindowContent, WindowFooter, WindowHeader };

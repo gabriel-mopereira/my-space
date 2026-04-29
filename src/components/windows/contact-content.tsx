@@ -35,11 +35,11 @@ const CONTACT_OPTIONS = [
 const ContactContent = () => (
   <div className="flex flex-col">
     <div className="grid grid-cols-12 border-b border-border w-full font-chicago-kare md:text-lg select-none">
-      <div className="col-span-3 border-r border-border px-2 inset-shadow-header">
+      <div className="col-span-3 border-r border-border px-2 inset-shadow-bevel">
         System
       </div>
 
-      <div className="col-span-9 px-2 inset-shadow-header">Username</div>
+      <div className="col-span-9 px-2 inset-shadow-bevel">Username</div>
     </div>
 
     {CONTACT_OPTIONS.map(({ baseUrl, icon: Icon, label, slug, username }) => (

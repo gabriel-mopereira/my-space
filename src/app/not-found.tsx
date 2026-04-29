@@ -27,7 +27,7 @@ const NotFound = () => {
       <StaggeredOpener slugs={FILLER_SLUGS} topSlug="not-found" />
 
       <Window slug="not-found">
-        <div className="flex items-center p-2 border-b border-white select-none inset-shadow-header bg-primary/15 touch-none">
+        <div className="flex items-center p-2 border-b border-white select-none inset-shadow-bevel bg-primary/15 touch-none">
           <TitleBarLines />
 
           <p className="text-base font-dot-gothic-16 leading-0 px-2">悲しい</p>

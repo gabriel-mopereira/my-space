@@ -52,31 +52,31 @@
     --color-ring: var(--ring);
 
     /* Shadows */
-    --inset-shadow-header:
+    --shadow-window: 2px 2px 0px var(--shadow-dark);
+    --shadow-bevel-outer:
+        1px 1px 0px var(--shadow-light), -1px -1px 0px var(--shadow-dark);
+    --inset-shadow-bevel:
         inset 1px 1px 0px var(--shadow-light),
         inset -1px -1px 0px var(--shadow-dark);
-    --inset-shadow-header-active:
+    --inset-shadow-bevel-pressed:
         inset 1px 1px 0px var(--shadow-dark),
         inset -1px -1px 0px var(--shadow-light);
-    --inset-shadow-footer:
+    --inset-shadow-bevel-thick:
         inset 3px 3px 0px var(--shadow-light),
         inset -3px -3px 0px var(--shadow-dark);
-    --inset-shadow-footer-active:
+    --inset-shadow-bevel-thick-pressed:
         inset 3px 3px 0px var(--shadow-dark),
         inset -3px -3px 0px var(--shadow-light);
-    --inset-shadow-button:
+    --inset-shadow-bevel-key:
         inset 1px 1px 0px var(--shadow-light),
         inset 2px 1px 0px var(--shadow-light),
         inset -1px -1px 0px var(--shadow-dark),
         inset -2px -1px 0px var(--shadow-dark);
-    --inset-shadow-button-active:
+    --inset-shadow-bevel-key-pressed:
         inset -1px -1px 0px var(--shadow-light),
         inset -2px -1px 0px var(--shadow-light),
         inset 1px 1px 0px var(--shadow-dark),
         inset 2px 1px 0px var(--shadow-dark);
-    --inset-shadow-button-wrapper:
-        inset 3px 3px 0px var(--shadow-light),
-        inset -3px -3px 0px var(--shadow-dark);
 }
 
 :root {
@@ -108,6 +108,6 @@
     --ring: oklch(0.7 0.1 290);
 
     /* Shadows */
-    --shadow-light: rgba(255, 255, 255, 0.2);
-    --shadow-dark: rgba(0, 0, 0, 0.2);
+    --shadow-light: rgba(255, 255, 255, 0.3);
+    --shadow-dark: rgba(0, 0, 0, 0.3);
 }

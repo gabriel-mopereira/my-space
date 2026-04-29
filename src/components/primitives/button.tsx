@@ -30,7 +30,7 @@ const buttonVariants = cva(
       },
       variant: {
         default:
-          "text-primary-foreground not-disabled:inset-shadow-button bg-transparent pixel-corners active:inset-shadow-button-active active:text-neutral-700 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-600/10",
+          "text-primary-foreground not-disabled:inset-shadow-bevel-key bg-transparent pixel-corners active:inset-shadow-bevel-key-pressed active:text-neutral-700 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-600/10",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
         ghost:
@@ -40,7 +40,7 @@ const buttonVariants = cva(
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
-          "border border-border text-primary-foreground not-disabled:inset-shadow-button bg-transparent active:inset-shadow-button-active active:text-neutral-700 hover:bg-neutral-600/10",
+          "border border-border text-primary-foreground not-disabled:inset-shadow-bevel-key bg-transparent active:inset-shadow-bevel-key-pressed active:text-neutral-700 hover:bg-neutral-600/10",
       },
     },
   },
@@ -60,7 +60,7 @@ const ButtonWrapper = ({
       "p-0.5 h-fit pixel-corners flex items-center justify-center",
       disabled
         ? "opacity-50 cursor-not-allowed"
-        : "inset-shadow-button-wrapper",
+        : "inset-shadow-bevel-thick",
       className,
     )}
   >

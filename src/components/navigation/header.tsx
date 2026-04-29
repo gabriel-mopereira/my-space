@@ -15,7 +15,7 @@ const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
               "font-chicago-kare w-full flex justify-between items-center px-2 py-0.5 leading-5 text-xl select-none",
               disabled
                 ? "*:opacity-50 pointer-events-none"
-                : "inset-shadow-header active:inset-shadow-header-active active:text-neutral-700 hover:bg-neutral-900/10",
+                : "inset-shadow-bevel active:inset-shadow-bevel-pressed active:text-neutral-700 hover:bg-neutral-900/10",
             )}
             disabled={disabled}
             paramKey={slug}
