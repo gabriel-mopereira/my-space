@@ -108,7 +108,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
     <div
       aria-labelledby={`window-${slug}-title`}
       className={cn(
-        "w-max backdrop-blur-sm border border-white shadow-window outline-none",
+        "group/window w-max backdrop-blur-sm border border-white shadow-window outline-none",
         isDragging ? "cursor-grabbing" : "cursor-default",
         className,
       )}
@@ -173,7 +173,9 @@ const CloseButton = () => {
       size="windowControl"
       variant="secondary"
     >
-      <span aria-hidden="true" className="ml-px">x</span>
+      <span aria-hidden="true" className="ml-px">
+        x
+      </span>
     </Button>
   );
 };
@@ -196,7 +198,7 @@ const WindowHeader = ({
   return (
     <div
       className={cn(
-        "flex items-center p-2 border-b border-white select-none inset-shadow-bevel cursor-grab active:cursor-grabbing bg-primary/15 touch-none font-chicago-kare",
+        "flex items-center p-2 border-b border-white select-none inset-shadow-bevel cursor-grab active:cursor-grabbing bg-primary/5 group-focus-within/window:bg-primary/15 transition-colors touch-none font-chicago-kare",
         className,
       )}
       onPointerDown={handlers.handlePointerDown}
