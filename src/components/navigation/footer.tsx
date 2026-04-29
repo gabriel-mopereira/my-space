@@ -6,9 +6,10 @@ import NavLink from "@/components/navigation/nav-link";
 
 import { cn } from "@/lib/utils";
 
-const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
+const Footer = ({ ...props }: HTMLAttributes<HTMLElement>) => {
   return (
-    <div
+    <nav
+      aria-label="Primary"
       className={cn("flex backdrop-blur-sm bg-primary/15", props.className)}
       {...props}
     >
@@ -32,7 +33,7 @@ const Footer = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
           ))}
         </div>
       </ButtonWrapper>
-    </div>
+    </nav>
   );
 };
 

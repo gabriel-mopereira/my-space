@@ -10,7 +10,7 @@ const Background = () => {
   }, []);
 
   return (
-    <div className="absolute w-full h-full">
+    <div aria-hidden="true" className="absolute w-full h-full">
       <DitherWave
         downScale={0.5}
         intensity={1}

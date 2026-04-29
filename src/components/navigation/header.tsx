@@ -5,9 +5,9 @@ import NavLink from "@/components/navigation/nav-link";
 
 import { cn } from "@/lib/utils";
 
-const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
+const Header = ({ ...props }: HTMLAttributes<HTMLElement>) => {
   return (
-    <div {...props}>
+    <nav aria-label="Primary" {...props}>
       {NAV_OPTIONS.map(({ disabled, icon: Icon, label, slug }) => (
         <div className="flex-1" key={slug}>
           <NavLink
@@ -29,7 +29,7 @@ const Header = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
           </NavLink>
         </div>
       ))}
-    </div>
+    </nav>
   );
 };
 
