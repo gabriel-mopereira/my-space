@@ -48,7 +48,7 @@ const RootLayout = ({
     lang="en"
   >
     <body className="h-full overflow-hidden flex flex-col">
-      <main className="relative min-h-[130vh] md:min-h-full bg-background text-white">
+      <main className="relative md:min-h-full bg-background text-white">
         <Background />
         {children}
       </main>

@@ -1,16 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import DitherWave from "./dither-wave";
 
 const Background = () => {
-  useEffect(() => {
-    document.documentElement.scrollTop =
-      (document.documentElement.scrollHeight - window.innerHeight) / 2;
-  }, []);
-
   return (
-    <div aria-hidden="true" className="absolute w-full h-full">
+    <div aria-hidden="true" className="absolute w-full h-full inset-[-10vh]">
       <DitherWave
         downScale={0.5}
         intensity={1}
