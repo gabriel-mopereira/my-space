@@ -4,7 +4,7 @@ const Background = () => {
   return (
     <div
       aria-hidden="true"
-      className="absolute w-full h-[120vh] top-[-10vh] bottom-[-10vh]"
+      className="absolute w-full h-[130vh] top-[-10vh] bottom-[-20vh]"
     >
       <DitherWave
         downScale={0.5}
