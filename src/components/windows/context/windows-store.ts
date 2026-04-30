@@ -77,8 +77,12 @@ const addListener = (
   };
 };
 
-const createWindowsStore = (): WindowsStore => {
-  const open = new Set<string>();
+const createWindowsStore = ({
+  initialOpen = [],
+}: {
+  initialOpen?: ReadonlyArray<string>;
+}): WindowsStore => {
+  const open = new Set<string>(initialOpen);
   const zIndexes = new Map<string, number>();
   const animations = new Map<string, WindowAnimation>();
 
@@ -91,6 +95,11 @@ const createWindowsStore = (): WindowsStore => {
   let counter = 0;
   let openSnapshot: ReadonlySet<string> = new Set(open);
   let animationsSnapshot: ReadonlyMap<string, WindowAnimation> = new Map();
+
+  for (const slug of initialOpen) {
+    counter += 1;
+    zIndexes.set(slug, counter);
+  }
 
   const refreshOpenSnapshot = () => {
     openSnapshot = new Set(open);
