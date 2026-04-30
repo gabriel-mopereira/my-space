@@ -8,6 +8,7 @@ import {
 import localFont from "next/font/local";
 
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Background from "@/components/effects/background";
 
@@ -49,13 +50,15 @@ const RootLayout = ({
     className={`h-full antialiased ${ibmPlex.variable} ${chicagoKare.variable} ${dotGothic.variable}`}
     lang="en"
   >
-    <Analytics />
-
     <body className="h-full overflow-hidden flex flex-col">
       <main className="relative md:min-h-full bg-background text-white">
         <Background />
         {children}
       </main>
+
+      <Analytics />
+
+      <SpeedInsights />
     </body>
   </html>
 );
