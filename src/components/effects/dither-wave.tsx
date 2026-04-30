@@ -2,49 +2,160 @@
 
 import { useEffect, useRef } from "react";
 
-import {
-  OrthographicCamera,
-  Scene,
-  Vector2,
-  Vector3,
-  WebGLRenderer,
-  ShaderMaterial,
-  PlaneGeometry,
-  Mesh,
-} from "three";
 import { cn } from "@/lib/utils";
 
 export type DitherWaveProps = {
-  /** Content to render on top of the effect */
   children?: React.ReactNode;
-  /** Additional CSS classes */
   className?: string;
-  /** Downscale factor for dithering pattern (higher = coarser) */
   downScale?: number;
-  /** Height of the component in pixels or CSS value */
   height?: number | string;
-  /** Wave intensity/amplitude */
   intensity?: number;
-  /** Maximum frames per second cap */
   maxFPS?: number;
-  /** Overall opacity (0-1) */
   opacity?: number;
-  /** Pause rendering when component is off-screen */
   pauseWhenOffscreen?: boolean;
-  /** Primary color in the gradient */
   primaryColor?: string;
-  /** Quality preset for performance/visual tradeoff */
   quality?: "low" | "medium" | "high";
-  /** Scale of the wave pattern (higher = larger waves) */
   scale?: number;
-  /** Secondary color in the gradient */
   secondaryColor?: string;
-  /** Animation speed multiplier */
   speed?: number;
-  /** Tertiary color in the gradient */
   tertiaryColor?: string;
-  /** Width of the component in pixels or CSS value */
   width?: number | string;
+};
+
+const VERTEX_SHADER = `
+  attribute vec3 position;
+  void main() {
+    gl_Position = vec4(position, 1.0);
+  }
+`;
+
+const FRAGMENT_SHADER = `
+  precision highp float;
+
+  #define COLOR_COUNT 3
+
+  uniform float iTime;
+  uniform vec2 iResolution;
+  uniform float uSpeed;
+  uniform float uIntensity;
+  uniform float uScale;
+  uniform float uDownScale;
+  uniform float uOpacity;
+
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
+  uniform vec3 uColor3;
+
+  vec3 colors[COLOR_COUNT];
+
+  void setupColorPalette() {
+    colors[0] = uColor1;
+    colors[1] = uColor2;
+    colors[2] = uColor3;
+  }
+
+  float Bayer2(vec2 a) {
+    a = floor(a);
+    return fract(a.x / 2.0 + a.y * a.y * 0.75);
+  }
+
+  #define Bayer4(a)   (Bayer2(0.5 * (a)) * 0.25 + Bayer2(a))
+  #define Bayer8(a)   (Bayer4(0.5 * (a)) * 0.25 + Bayer2(a))
+  #define Bayer16(a)  (Bayer8(0.5 * (a)) * 0.25 + Bayer2(a))
+  #define Bayer32(a)  (Bayer16(0.5 * (a)) * 0.25 + Bayer2(a))
+  #define Bayer64(a)  (Bayer32(0.5 * (a)) * 0.25 + Bayer2(a))
+
+  vec3 applyDitheredColor(float value, vec2 pixelCoord) {
+    float paletteIndex = clamp(value, 0.0, 1.0) * float(COLOR_COUNT - 1);
+
+    vec3 colorA = vec3(0.0);
+    vec3 colorB = vec3(0.0);
+
+    for (int i = 0; i < COLOR_COUNT; i++) {
+      if (float(i) == floor(paletteIndex)) {
+        colorA = colors[i];
+        if (i < COLOR_COUNT - 1) {
+          colorB = colors[i + 1];
+        } else {
+          colorB = colorA;
+        }
+        break;
+      }
+    }
+
+    float ditherValue = Bayer64(pixelCoord * 0.25);
+
+    float blendAmount = float(fract(paletteIndex) > ditherValue);
+
+    return mix(colorA, colorB, blendAmount);
+  }
+
+  float flowField(vec2 p, float t) {
+    return sin(p.x + sin(p.y + t * 0.1)) * sin(p.y * p.x * 0.1 + t * 0.2);
+  }
+
+  vec2 computeField(vec2 p, float t) {
+    vec2 ep = vec2(0.05, 0.0);
+    vec2 result = vec2(0.0);
+
+    for (int i = 0; i < 20; i++) {
+      float t0 = flowField(p, t);
+      float t1 = flowField(p + ep.xy, t);
+      float t2 = flowField(p + ep.yx, t);
+      vec2 gradient = vec2((t1 - t0), (t2 - t0)) / ep.xx;
+      vec2 tangent = vec2(-gradient.y, gradient.x);
+
+      p += tangent * 0.5 + gradient * 0.005;
+      p.x += sin(t * 0.25) * 0.1;
+      p.y += cos(t * 0.25) * 0.1;
+      result = gradient;
+    }
+
+    return result;
+  }
+
+  void main() {
+    setupColorPalette();
+
+    vec2 uv = gl_FragCoord.xy / iResolution.xy - 0.5;
+    uv.x *= iResolution.x / iResolution.y;
+    float animTime = iTime * uSpeed;
+
+    vec2 p = uv * uScale;
+
+    vec2 field = computeField(p, animTime);
+
+    float colorValue = length(field) * uIntensity;
+    colorValue = clamp(colorValue, 0.0, 1.0);
+
+    vec3 finalColor = applyDitheredColor(colorValue, gl_FragCoord.xy / uDownScale);
+
+    gl_FragColor = vec4(finalColor, uOpacity);
+  }
+`;
+
+const QUAD_VERTICES = new Float32Array([
+  -1, -1, 0,
+  1, -1, 0,
+  -1, 1, 0,
+  1, 1, 0,
+]);
+
+const QUALITY_SETTINGS = {
+  high: { antialias: true, pixelRatioCap: 3 },
+  low: { antialias: false, pixelRatioCap: 1 },
+  medium: { antialias: true, pixelRatioCap: 2 },
+} as const;
+
+const hexToRgb = (hex: string) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        b: Number.parseInt(result[3], 16) / 255,
+        g: Number.parseInt(result[2], 16) / 255,
+        r: Number.parseInt(result[1], 16) / 255,
+      }
+    : { b: 0, g: 0, r: 0 };
 };
 
 const DitherWave: React.FC<DitherWaveProps> = ({
@@ -76,196 +187,118 @@ const DitherWave: React.FC<DitherWaveProps> = ({
     }
 
     const container = containerRef.current;
-
-    const hexToRgb = (hex: string) => {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      return result
-        ? {
-            b: Number.parseInt(result[3], 16) / 255,
-            g: Number.parseInt(result[2], 16) / 255,
-            r: Number.parseInt(result[1], 16) / 255,
-          }
-        : { b: 0, g: 0, r: 0 };
-    };
-
     const color1 = hexToRgb(primaryColor);
     const color2 = hexToRgb(secondaryColor);
     const color3 = hexToRgb(tertiaryColor);
 
-    const rect = container.getBoundingClientRect();
-    const actualWidth = rect.width;
-    const actualHeight = rect.height;
+    const settings = QUALITY_SETTINGS[quality];
+    const pixelRatio = Math.min(window.devicePixelRatio, settings.pixelRatioCap);
 
-    const qualitySettings = {
-      high: {
-        antialias: true,
-        pixelRatio: Math.min(window.devicePixelRatio, 3),
-      },
-      low: { antialias: false, pixelRatio: 1 },
-      medium: {
-        antialias: true,
-        pixelRatio: Math.min(window.devicePixelRatio, 2),
-      },
-    };
-    const settings = qualitySettings[quality];
+    const canvas = document.createElement("canvas");
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.display = "block";
 
-    const renderer = new WebGLRenderer({
+    const gl = canvas.getContext("webgl", {
       alpha: true,
       antialias: settings.antialias,
       depth: false,
       powerPreference: "high-performance",
+      premultipliedAlpha: false,
       stencil: false,
     });
-    renderer.setClearColor(0x00_00_00, 0);
 
-    const pixelRatio = settings.pixelRatio;
-    renderer.setSize(actualWidth, actualHeight, false);
-    renderer.setPixelRatio(pixelRatio);
+    if (!gl) {
+      return;
+    }
 
-    renderer.domElement.style.width = "100%";
-    renderer.domElement.style.height = "100%";
-    renderer.domElement.style.display = "block";
-
-    container.append(renderer.domElement);
-
-    const scene = new Scene();
-    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-    const bufferWidth = actualWidth * pixelRatio;
-    const bufferHeight = actualHeight * pixelRatio;
-
-    const uniforms = {
-      iResolution: { value: new Vector2(bufferWidth, bufferHeight) },
-      iTime: { value: 0 },
-      uColor1: { value: new Vector3(color1.r, color1.g, color1.b) },
-      uColor2: { value: new Vector3(color2.r, color2.g, color2.b) },
-      uColor3: { value: new Vector3(color3.r, color3.g, color3.b) },
-      uDownScale: { value: downScale },
-      uIntensity: { value: intensity },
-      uOpacity: { value: opacity },
-      uScale: { value: scale },
-      uSpeed: { value: speed },
+    const compile = (type: number, source: string): WebGLShader => {
+      const shader = gl.createShader(type);
+      if (!shader) {
+        throw new Error("DitherWave: gl.createShader returned null");
+      }
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        const info = gl.getShaderInfoLog(shader);
+        gl.deleteShader(shader);
+        throw new Error(`DitherWave: shader compile failed — ${info}`);
+      }
+      return shader;
     };
 
-    const vertexShader = `
-      void main() {
-        gl_Position = vec4(position, 1.0);
-      }
-    `;
+    const vs = compile(gl.VERTEX_SHADER, VERTEX_SHADER);
+    const fs = compile(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
 
-    const fragmentShader = `
-      #define COLOR_COUNT 3
+    const program = gl.createProgram();
+    if (!program) {
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      throw new Error("DitherWave: gl.createProgram returned null");
+    }
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      const info = gl.getProgramInfoLog(program);
+      gl.deleteProgram(program);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      throw new Error(`DitherWave: program link failed — ${info}`);
+    }
 
-      uniform float iTime;
-      uniform vec2 iResolution;
-      uniform float uSpeed;
-      uniform float uIntensity;
-      uniform float uScale;
-      uniform float uDownScale;
-      uniform float uOpacity;
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, QUAD_VERTICES, gl.STATIC_DRAW);
 
-      uniform vec3 uColor1;
-      uniform vec3 uColor2;
-      uniform vec3 uColor3;
+    const posLoc = gl.getAttribLocation(program, "position");
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
 
-      vec3 colors[COLOR_COUNT];
+    const uTime = gl.getUniformLocation(program, "iTime");
+    const uResolution = gl.getUniformLocation(program, "iResolution");
+    const uSpeed = gl.getUniformLocation(program, "uSpeed");
+    const uIntensity = gl.getUniformLocation(program, "uIntensity");
+    const uScale = gl.getUniformLocation(program, "uScale");
+    const uDownScale = gl.getUniformLocation(program, "uDownScale");
+    const uOpacity = gl.getUniformLocation(program, "uOpacity");
+    const uColor1 = gl.getUniformLocation(program, "uColor1");
+    const uColor2 = gl.getUniformLocation(program, "uColor2");
+    const uColor3 = gl.getUniformLocation(program, "uColor3");
 
-      void setupColorPalette() {
-        colors[0] = uColor1;
-        colors[1] = uColor2;
-        colors[2] = uColor3;
-      }
+    container.append(canvas);
 
-      float Bayer2(vec2 a) {
-        a = floor(a);
-        return fract(a.x / 2.0 + a.y * a.y * 0.75);
-      }
+    gl.useProgram(program);
+    gl.uniform3f(uColor1, color1.r, color1.g, color1.b);
+    gl.uniform3f(uColor2, color2.r, color2.g, color2.b);
+    gl.uniform3f(uColor3, color3.r, color3.g, color3.b);
+    gl.uniform1f(uSpeed, speed);
+    gl.uniform1f(uIntensity, intensity);
+    gl.uniform1f(uScale, scale);
+    gl.uniform1f(uDownScale, downScale);
+    gl.uniform1f(uOpacity, opacity);
+    gl.clearColor(0, 0, 0, 0);
 
-      #define Bayer4(a)   (Bayer2(0.5 * (a)) * 0.25 + Bayer2(a))
-      #define Bayer8(a)   (Bayer4(0.5 * (a)) * 0.25 + Bayer2(a))
-      #define Bayer16(a)  (Bayer8(0.5 * (a)) * 0.25 + Bayer2(a))
-      #define Bayer32(a)  (Bayer16(0.5 * (a)) * 0.25 + Bayer2(a))
-      #define Bayer64(a)  (Bayer32(0.5 * (a)) * 0.25 + Bayer2(a))
+    const applySize = () => {
+      const rect = container.getBoundingClientRect();
+      const bufferWidth = Math.max(1, Math.round(rect.width * pixelRatio));
+      const bufferHeight = Math.max(1, Math.round(rect.height * pixelRatio));
+      canvas.width = bufferWidth;
+      canvas.height = bufferHeight;
+      gl.viewport(0, 0, bufferWidth, bufferHeight);
+      gl.useProgram(program);
+      gl.uniform2f(uResolution, bufferWidth, bufferHeight);
+    };
 
-      vec3 applyDitheredColor(float value, vec2 pixelCoord) {
-        float paletteIndex = clamp(value, 0.0, 1.0) * float(COLOR_COUNT - 1);
+    const draw = (timeSeconds: number) => {
+      gl.useProgram(program);
+      gl.uniform1f(uTime, timeSeconds);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    };
 
-        vec3 colorA = vec3(0.0);
-        vec3 colorB = vec3(0.0);
-
-        for (int i = 0; i < COLOR_COUNT; i++) {
-          if (float(i) == floor(paletteIndex)) {
-            colorA = colors[i];
-            if (i < COLOR_COUNT - 1) {
-              colorB = colors[i + 1];
-            } else {
-              colorB = colorA;
-            }
-            break;
-          }
-        }
-
-        float ditherValue = Bayer64(pixelCoord * 0.25);
-
-        float blendAmount = float(fract(paletteIndex) > ditherValue);
-
-        return mix(colorA, colorB, blendAmount);
-      }
-
-      float flowField(vec2 p, float t) {
-        return sin(p.x + sin(p.y + t * 0.1)) * sin(p.y * p.x * 0.1 + t * 0.2);
-      }
-
-      vec2 computeField(vec2 p, float t) {
-        vec2 ep = vec2(0.05, 0.0);
-        vec2 result = vec2(0.0);
-
-        for (int i = 0; i < 20; i++) {
-          float t0 = flowField(p, t);
-          float t1 = flowField(p + ep.xy, t);
-          float t2 = flowField(p + ep.yx, t);
-          vec2 gradient = vec2((t1 - t0), (t2 - t0)) / ep.xx;
-          vec2 tangent = vec2(-gradient.y, gradient.x);
-
-          p += tangent * 0.5 + gradient * 0.005;
-          p.x += sin(t * 0.25) * 0.1;
-          p.y += cos(t * 0.25) * 0.1;
-          result = gradient;
-        }
-
-        return result;
-      }
-
-      void main() {
-        setupColorPalette();
-
-        vec2 uv = gl_FragCoord.xy / iResolution.xy - 0.5;
-        uv.x *= iResolution.x / iResolution.y;
-        float animTime = iTime * uSpeed;
-
-        vec2 p = uv * uScale;
-
-        vec2 field = computeField(p, animTime);
-
-        float colorValue = length(field) * uIntensity;
-        colorValue = clamp(colorValue, 0.0, 1.0);
-
-        vec3 finalColor = applyDitheredColor(colorValue, gl_FragCoord.xy / uDownScale);
-
-        gl_FragColor = vec4(finalColor, uOpacity);
-      }
-    `;
-
-    const material = new ShaderMaterial({
-      fragmentShader,
-      transparent: true,
-      uniforms,
-      vertexShader,
-    });
-
-    const geometry = new PlaneGeometry(2, 2);
-    const mesh = new Mesh(geometry, material);
-    scene.add(mesh);
+    applySize();
+    draw(0);
 
     let observer: IntersectionObserver | null = null;
     if (pauseWhenOffscreen) {
@@ -279,6 +312,7 @@ const DitherWave: React.FC<DitherWaveProps> = ({
     }
 
     const frameInterval = 1000 / maxFPS;
+
     const animate = (currentTime: number) => {
       rafRef.current = requestAnimationFrame(animate);
 
@@ -299,22 +333,12 @@ const DitherWave: React.FC<DitherWaveProps> = ({
         return;
       }
 
-      uniforms.iTime.value = (currentTime - startTimeRef.current) * 0.001;
-
-      uniforms.uSpeed.value = speed;
-      uniforms.uIntensity.value = intensity;
-      uniforms.uScale.value = scale;
-      uniforms.uDownScale.value = downScale;
-      uniforms.uOpacity.value = opacity;
-
-      renderer.render(scene, camera);
+      draw((currentTime - startTimeRef.current) * 0.001);
     };
 
     const reducedMotionQuery = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     );
-
-    renderer.render(scene, camera);
 
     const startLoop = () => {
       if (rafRef.current) {
@@ -327,9 +351,7 @@ const DitherWave: React.FC<DitherWaveProps> = ({
       if (!rafRef.current) {
         return;
       }
-
       cancelAnimationFrame(rafRef.current);
-
       rafRef.current = 0;
       startTimeRef.current = 0;
     };
@@ -343,22 +365,13 @@ const DitherWave: React.FC<DitherWaveProps> = ({
         stopLoop();
         return;
       }
-
       startLoop();
     };
 
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
 
     const handleResize = () => {
-      const newRect = container.getBoundingClientRect();
-      const newWidth = newRect.width;
-      const newHeight = newRect.height;
-
-      renderer.setSize(newWidth, newHeight, false);
-
-      const newBufferWidth = newWidth * pixelRatio;
-      const newBufferHeight = newHeight * pixelRatio;
-      uniforms.iResolution.value.set(newBufferWidth, newBufferHeight);
+      applySize();
     };
 
     window.addEventListener("resize", handleResize);
@@ -371,17 +384,16 @@ const DitherWave: React.FC<DitherWaveProps> = ({
       );
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
       }
-
-      if (observer) {
-        observer.disconnect();
-      }
-
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-      if (container.contains(renderer.domElement)) {
-        renderer.domElement.remove();
+      observer?.disconnect();
+      gl.deleteBuffer(buffer);
+      gl.deleteProgram(program);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      if (container.contains(canvas)) {
+        canvas.remove();
       }
     };
   }, [
