@@ -23,7 +23,7 @@ const Page = () => {
       <div className="relative text-white font-ibm-plex">
         <Header className="w-full hidden md:flex flex-row border-b border-white bg-primary/15 backdrop-blur-sm divide-white divide-x" />
 
-        <Footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden" />
+        <Footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden bg-primary/15 backdrop-blur-sm" />
 
         <div className="relative flex-1">
           <Window className="max-w-94 md:max-w-2xl" slug="about">
