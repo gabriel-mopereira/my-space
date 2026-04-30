@@ -10,16 +10,10 @@ import PositionRegistryProvider from "@/components/windows/context/position-regi
 
 type WindowsProviderProps = {
   children: ReactNode;
-  initialOpen?: Array<string>;
 };
 
-const WindowsProvider = ({
-  children,
-  initialOpen = [],
-}: WindowsProviderProps) => {
-  const [store, setStore] = useState(() => createWindowsStore(initialOpen));
-  // Void the setStore function to statisfy linter.
-  void setStore;
+const WindowsProvider = ({ children }: WindowsProviderProps) => {
+  const [store] = useState(() => createWindowsStore());
 
   return (
     <PositionRegistryProvider>

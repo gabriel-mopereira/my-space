@@ -12,33 +12,10 @@ import Footer from "@/components/navigation/footer";
 import WindowAnimationOverlay from "@/components/windows/window-animation-overlay";
 import WindowsProvider from "@/components/windows/context/windows-provider";
 import WindowsUrlSync from "@/components/windows/windows-url-sync";
-import { NAV_OPTIONS } from "@/components/navigation/options";
 
-const getInitialOpen = (params: SearchParams): Array<string> => {
-  const paramKeys = Object.keys(params);
-
-  if (paramKeys.length === 0) {
-    return ["about"];
-  }
-
-  return paramKeys.filter((key) =>
-    NAV_OPTIONS.some((opt) => opt.slug === key && !opt.disabled),
-  );
-};
-
-type SearchParams = Record<string, string | undefined>;
-
-const Page = async ({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) => {
-  const params = await searchParams;
-
-  const initialOpen = getInitialOpen(params);
-
+const Page = () => {
   return (
-    <WindowsProvider initialOpen={initialOpen}>
+    <WindowsProvider>
       <WindowAnimationOverlay />
 
       <WindowsUrlSync />
