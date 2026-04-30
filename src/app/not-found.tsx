@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Button, ButtonWrapper } from "@/components/primitives/button";
@@ -10,8 +9,6 @@ import {
   WindowFooter,
   WindowHeader,
 } from "@/components/windows/window";
-
-import Pool from "@/../public/pool.gif";
 
 import StaggeredOpener from "./not-found-opener";
 
@@ -37,7 +34,7 @@ const NotFound = () => {
 
         <WindowContent>
           <div className="relative">
-            <Image alt="Not Found" src={Pool} />
+            <video autoPlay loop muted src="/pool.mp4" />
 
             <div className="absolute inset-0 flex flex-col justify-between p-4">
               <p className="text-base md:text-lg leading-tight max-w-60 [text-shadow:1px_1px_0_rgb(0_0_0_/55%)] font-chicago-kare">
