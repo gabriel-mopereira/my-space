@@ -18,11 +18,6 @@ const chicagoKare = localFont({
       style: "normal",
       weight: "400",
     },
-    {
-      path: "../fonts/ChicagoKare-Regular.woff",
-      style: "normal",
-      weight: "400",
-    },
   ],
   variable: "--font-chicago-kare",
 });
@@ -35,7 +30,7 @@ const dotGothic = dotGothic16({
 const ibmPlex = ibmPlexMono({
   subsets: ["latin"],
   variable: "--font-ibm-plex",
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {

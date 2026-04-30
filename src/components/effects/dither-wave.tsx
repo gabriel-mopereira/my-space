@@ -2,7 +2,16 @@
 
 import { useEffect, useRef } from "react";
 
-import * as THREE from "three";
+import {
+  OrthographicCamera,
+  Scene,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
+  ShaderMaterial,
+  PlaneGeometry,
+  Mesh,
+} from "three";
 import { cn } from "@/lib/utils";
 
 export type DitherWaveProps = {
@@ -100,7 +109,7 @@ const DitherWave: React.FC<DitherWaveProps> = ({
     };
     const settings = qualitySettings[quality];
 
-    const renderer = new THREE.WebGLRenderer({
+    const renderer = new WebGLRenderer({
       alpha: true,
       antialias: settings.antialias,
       depth: false,
@@ -119,18 +128,18 @@ const DitherWave: React.FC<DitherWaveProps> = ({
 
     container.append(renderer.domElement);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const scene = new Scene();
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     const bufferWidth = actualWidth * pixelRatio;
     const bufferHeight = actualHeight * pixelRatio;
 
     const uniforms = {
-      iResolution: { value: new THREE.Vector2(bufferWidth, bufferHeight) },
+      iResolution: { value: new Vector2(bufferWidth, bufferHeight) },
       iTime: { value: 0 },
-      uColor1: { value: new THREE.Vector3(color1.r, color1.g, color1.b) },
-      uColor2: { value: new THREE.Vector3(color2.r, color2.g, color2.b) },
-      uColor3: { value: new THREE.Vector3(color3.r, color3.g, color3.b) },
+      uColor1: { value: new Vector3(color1.r, color1.g, color1.b) },
+      uColor2: { value: new Vector3(color2.r, color2.g, color2.b) },
+      uColor3: { value: new Vector3(color3.r, color3.g, color3.b) },
       uDownScale: { value: downScale },
       uIntensity: { value: intensity },
       uOpacity: { value: opacity },
@@ -247,15 +256,15 @@ const DitherWave: React.FC<DitherWaveProps> = ({
       }
     `;
 
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       fragmentShader,
       transparent: true,
       uniforms,
       vertexShader,
     });
 
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const mesh = new THREE.Mesh(geometry, material);
+    const geometry = new PlaneGeometry(2, 2);
+    const mesh = new Mesh(geometry, material);
     scene.add(mesh);
 
     let observer: IntersectionObserver | null = null;

@@ -9,7 +9,7 @@ const AboutContent = () => (
         alt="That's me :ˆ)"
         className="object-cover object-top"
         height={240}
-        loading="eager"
+        priority
         sizes="240px"
         src={Me}
         width={240}
