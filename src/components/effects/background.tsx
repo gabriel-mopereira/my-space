@@ -2,10 +2,7 @@ import DitherWave from "./dither-wave";
 
 const Background = () => {
   return (
-    <div
-      aria-hidden="true"
-      className="absolute w-full h-[135vh] top-[-10vh] bottom-[-25vh]"
-    >
+    <div aria-hidden="true" className="absolute w-full h-[135vh] top-[-10vh] bottom-[-25vh]">
       <DitherWave
         downScale={0.5}
         intensity={1}

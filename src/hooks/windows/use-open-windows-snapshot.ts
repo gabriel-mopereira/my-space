@@ -12,10 +12,7 @@ const useOpenWindowsSnapshot = () => {
     [store],
   );
 
-  const getSnapshot = useCallback(
-    () => store.getOpenWindowsSnapshot(),
-    [store],
-  );
+  const getSnapshot = useCallback(() => store.getOpenWindowsSnapshot(), [store]);
 
   return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 };

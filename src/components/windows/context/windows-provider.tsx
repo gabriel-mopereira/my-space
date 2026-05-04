@@ -3,20 +3,17 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-import createWindowsStore from "@/components/windows/context/windows-store";
-import WindowsActionsContext from "@/components/windows/context/windows-actions-context";
-import WindowsStoreContext from "@/components/windows/context/windows-store-context";
 import PositionRegistryProvider from "@/components/windows/context/position-registry-provider";
+import WindowsActionsContext from "@/components/windows/context/windows-actions-context";
+import createWindowsStore from "@/components/windows/context/windows-store";
+import WindowsStoreContext from "@/components/windows/context/windows-store-context";
 
 type WindowsProviderProps = {
   children: ReactNode;
   initialOpen?: Array<string>;
 };
 
-const WindowsProvider = ({
-  children,
-  initialOpen = [],
-}: WindowsProviderProps) => {
+const WindowsProvider = ({ children, initialOpen = [] }: WindowsProviderProps) => {
   const [store] = useState(() => createWindowsStore({ initialOpen }));
 
   return (

@@ -3,17 +3,14 @@
 import type { ReactNode } from "react";
 import { useCallback, useMemo, useRef } from "react";
 
-import type { Position } from "@/types/windows";
-
 import PositionRegistryContext from "@/components/windows/context/position-registry-context";
+import type { Position } from "@/types/windows";
 
 type PositionRegistryProviderProps = {
   children: ReactNode;
 };
 
-const PositionRegistryProvider = ({
-  children,
-}: PositionRegistryProviderProps) => {
+const PositionRegistryProvider = ({ children }: PositionRegistryProviderProps) => {
   const positions = useRef<Map<string, Position>>(new Map());
 
   const registerPosition = useCallback((slug: string, position: Position) => {
@@ -32,9 +29,7 @@ const PositionRegistryProvider = ({
   );
 
   return (
-    <PositionRegistryContext.Provider value={value}>
-      {children}
-    </PositionRegistryContext.Provider>
+    <PositionRegistryContext.Provider value={value}>{children}</PositionRegistryContext.Provider>
   );
 };
 

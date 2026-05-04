@@ -7,10 +7,7 @@ const CASCADE_OFFSET = 30;
 const isNear = (a: Position, b: Position) =>
   Math.abs(a.x - b.x) < CASCADE_OFFSET && Math.abs(a.y - b.y) < CASCADE_OFFSET;
 
-const calculatePosition = (
-  positions: Array<Position>,
-  windowRef: RefObject<HTMLDivElement>,
-) => {
+const calculatePosition = (positions: Array<Position>, windowRef: RefObject<HTMLDivElement>) => {
   const position = {
     x: (window.innerWidth - windowRef.current.offsetWidth) / 2,
     y: (window.innerHeight - windowRef.current.offsetHeight) / 2,

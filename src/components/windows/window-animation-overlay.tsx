@@ -3,10 +3,7 @@
 import type { TransitionEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type {
-  Rect,
-  WindowAnimation,
-} from "@/components/windows/context/windows-store";
+import type { Rect, WindowAnimation } from "@/components/windows/context/windows-store";
 import { useAllWindowAnimations } from "@/hooks/windows/use-window-animation";
 import useWindowsActions from "@/hooks/windows/use-windows-actions";
 
@@ -87,9 +84,7 @@ const WindowAnimationOverlay = () => {
   const animations = useAllWindowAnimations();
 
   const isAnimating = animations.size > 0;
-  const isOpening = [...animations.values()].some(
-    (animation) => animation.direction === "opening",
-  );
+  const isOpening = [...animations.values()].some((animation) => animation.direction === "opening");
 
   useEffect(() => {
     if (!isOpening) {
@@ -110,11 +105,7 @@ const WindowAnimationOverlay = () => {
   return (
     <>
       {[...animations.entries()].map(([slug, animation]) => (
-        <AnimationRect
-          animation={animation}
-          key={`${slug}-${animation.direction}`}
-          slug={slug}
-        />
+        <AnimationRect animation={animation} key={`${slug}-${animation.direction}`} slug={slug} />
       ))}
     </>
   );

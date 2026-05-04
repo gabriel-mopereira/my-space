@@ -1,9 +1,9 @@
 import type { PointerEvent, RefObject } from "react";
 import { useCallback, useMemo, useRef, useState } from "react";
 
-import type { Position } from "@/types/windows";
 import useCascadePlacement from "@/hooks/windows/use-cascade-placement";
 import usePositionRegistry from "@/hooks/windows/use-position-registry";
+import type { Position } from "@/types/windows";
 
 type usePositionParams = {
   isOpen: boolean;
@@ -21,11 +21,7 @@ type usePositionReturn = {
   position: Position | null;
 };
 
-const usePosition = ({
-  isOpen,
-  slug,
-  windowRef,
-}: usePositionParams): usePositionReturn => {
+const usePosition = ({ isOpen, slug, windowRef }: usePositionParams): usePositionReturn => {
   const registry = usePositionRegistry();
 
   const { position, setPosition } = useCascadePlacement({

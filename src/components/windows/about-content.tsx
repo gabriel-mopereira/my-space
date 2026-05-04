@@ -1,6 +1,7 @@
-import { ClappingHands } from "@/components/icons";
 import Image from "next/image";
+
 import Me from "@/../public/me.jpeg";
+import { ClappingHands } from "@/components/icons";
 
 const AboutContent = () => (
   <div className="flex flex-col md:flex-row p-2 gap-2 items-center">
@@ -26,9 +27,8 @@ const AboutContent = () => (
       </h1>
 
       <h2 className="font-medium text-sm md:text-base">
-        Full-stack developer working with TypeScript, React, and Next.js. I
-        enjoy building performant web applications and writing code that&apos;s
-        clean and maintainable.
+        Full-stack developer working with TypeScript, React, and Next.js. I enjoy building
+        performant web applications and writing code that&apos;s clean and maintainable.
       </h2>
     </div>
   </div>

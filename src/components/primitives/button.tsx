@@ -1,7 +1,6 @@
-import type { ReactNode } from "react";
-
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
+import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -31,8 +30,7 @@ const buttonVariants = cva(
       variant: {
         default:
           "text-primary-foreground not-disabled:inset-shadow-bevel-key bg-transparent pixel-corners active:inset-shadow-bevel-key-pressed active:text-neutral-700 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-600/10",
-        destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20",
+        destructive: "bg-destructive/10 text-destructive hover:bg-destructive/20",
         ghost:
           "text-primary-foreground bg-transparent active:text-neutral-700 hover:bg-neutral-600/10",
         link: "text-primary underline-offset-4 hover:underline",
@@ -68,12 +66,7 @@ const ButtonWrapper = ({
 
 type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
 
-const Button = ({
-  className,
-  size = "default",
-  variant = "default",
-  ...props
-}: ButtonProps) => (
+const Button = ({ className, size = "default", variant = "default", ...props }: ButtonProps) => (
   <ButtonPrimitive
     className={cn(buttonVariants({ className, size, variant }))}
     data-slot="button"

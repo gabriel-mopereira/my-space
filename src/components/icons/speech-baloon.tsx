@@ -1,11 +1,6 @@
 import type { IconProps } from "./types";
 
-const SpeechBaloon = ({
-  className,
-  size = 24,
-  strokeWidth = 0,
-  ...props
-}: IconProps) => (
+const SpeechBaloon = ({ className, size = 24, strokeWidth = 0, ...props }: IconProps) => (
   <svg
     className={className}
     height={size}

@@ -1,9 +1,8 @@
 import type { HTMLAttributes } from "react";
 
-import { ButtonWrapper } from "@/components/primitives/button";
-import { NAV_OPTIONS } from "@/components/navigation/options";
 import NavLink from "@/components/navigation/nav-link";
-
+import { NAV_OPTIONS } from "@/components/navigation/options";
+import { ButtonWrapper } from "@/components/primitives/button";
 import { cn } from "@/lib/utils";
 
 const Footer = ({ ...props }: HTMLAttributes<HTMLElement>) => {

@@ -1,11 +1,6 @@
 import type { IconProps } from "./types";
 
-const PageCurl = ({
-  className,
-  size = 24,
-  strokeWidth = 0,
-  ...props
-}: IconProps) => (
+const PageCurl = ({ className, size = 24, strokeWidth = 0, ...props }: IconProps) => (
   <svg
     className={className}
     height={size}

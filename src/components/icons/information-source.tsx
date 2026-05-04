@@ -1,11 +1,6 @@
 import type { IconProps } from "./types";
 
-const InformationSource = ({
-  className,
-  size = 24,
-  strokeWidth = 0,
-  ...props
-}: IconProps) => (
+const InformationSource = ({ className, size = 24, strokeWidth = 0, ...props }: IconProps) => (
   <svg
     className={className}
     height={size}

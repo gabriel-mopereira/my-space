@@ -13,10 +13,7 @@ import {
 import StaggeredOpener from "./not-found-opener";
 
 const FILLER_COUNT = 50;
-const FILLER_SLUGS = Array.from(
-  { length: FILLER_COUNT },
-  (_, i) => `filler-${i}`,
-);
+const FILLER_SLUGS = Array.from({ length: FILLER_COUNT }, (_, i) => `filler-${i}`);
 
 const NotFound = () => {
   return (
@@ -38,8 +35,8 @@ const NotFound = () => {
 
             <div className="absolute inset-0 flex flex-col justify-between p-4">
               <p className="text-base md:text-lg leading-tight max-w-60 [text-shadow:1px_1px_0_rgb(0_0_0_/55%)] font-chicago-kare">
-                You found yourself too far away from home. Do you wish to go
-                back to a familiar place?
+                You found yourself too far away from home. Do you wish to go back to a familiar
+                place?
               </p>
 
               <div className="self-end">

@@ -1,6 +1,7 @@
 "use client";
 
 import type { MouseEvent, ReactNode } from "react";
+
 import { Button } from "@/components/primitives/button";
 import useIsOpen from "@/hooks/windows/use-is-open";
 import useWindowsActions from "@/hooks/windows/use-windows-actions";

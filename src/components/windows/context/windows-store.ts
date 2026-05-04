@@ -48,11 +48,7 @@ const notify = (listeners: Set<Listener> | undefined) => {
   }
 };
 
-const addListener = (
-  bucket: Map<string, Set<Listener>>,
-  slug: string,
-  listener: Listener,
-) => {
+const addListener = (bucket: Map<string, Set<Listener>>, slug: string, listener: Listener) => {
   let listeners = bucket.get(slug);
 
   if (!listeners) {
@@ -169,11 +165,7 @@ const createWindowsStore = ({
     }
   };
 
-  const closeWindow = (
-    slug: string,
-    shortcutRect?: Rect,
-    windowRect?: Rect,
-  ) => {
+  const closeWindow = (slug: string, shortcutRect?: Rect, windowRect?: Rect) => {
     if (!open.has(slug)) {
       return;
     }
@@ -199,11 +191,7 @@ const createWindowsStore = ({
     notify(openWindowsListeners);
   };
 
-  const toggleWindow = (
-    slug: string,
-    shortcutRect?: Rect,
-    windowRect?: Rect,
-  ) => {
+  const toggleWindow = (slug: string, shortcutRect?: Rect, windowRect?: Rect) => {
     if (open.has(slug)) {
       closeWindow(slug, shortcutRect, windowRect);
 
@@ -305,11 +293,5 @@ const createWindowsStore = ({
   };
 };
 
-export type {
-  AnimationDirection,
-  Rect,
-  WindowAnimation,
-  WindowsActions,
-  WindowsStore,
-};
+export type { AnimationDirection, Rect, WindowAnimation, WindowsActions, WindowsStore };
 export default createWindowsStore;

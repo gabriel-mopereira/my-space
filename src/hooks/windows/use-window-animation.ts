@@ -12,10 +12,7 @@ const useWindowAnimation = (slug: string) => {
     [store, slug],
   );
 
-  const getSnapshot = useCallback(
-    () => store.getAnimation(slug),
-    [store, slug],
-  );
+  const getSnapshot = useCallback(() => store.getAnimation(slug), [store, slug]);
 
   return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 };

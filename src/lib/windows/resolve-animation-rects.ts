@@ -28,9 +28,7 @@ const findVisibleShortcutRect = (slug: string): Rect | null => {
     return null;
   }
 
-  const matches = document.querySelectorAll(
-    `[data-shortcut-slug="${CSS.escape(slug)}"]`,
-  );
+  const matches = document.querySelectorAll(`[data-shortcut-slug="${CSS.escape(slug)}"]`);
 
   for (const element of matches) {
     if (isVisible(element)) {
@@ -46,9 +44,7 @@ const findWindowRect = (slug: string): Rect | null => {
     return null;
   }
 
-  const matches = document.querySelectorAll(
-    `[data-window-slug="${CSS.escape(slug)}"]`,
-  );
+  const matches = document.querySelectorAll(`[data-window-slug="${CSS.escape(slug)}"]`);
 
   for (const element of matches) {
     if (isVisible(element)) {
@@ -67,9 +63,4 @@ const prefersReducedMotion = () => {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 };
 
-export {
-  buildShortcutRect,
-  findVisibleShortcutRect,
-  findWindowRect,
-  prefersReducedMotion,
-};
+export { buildShortcutRect, findVisibleShortcutRect, findWindowRect, prefersReducedMotion };

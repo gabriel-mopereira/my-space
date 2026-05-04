@@ -1,8 +1,7 @@
 import type { HTMLAttributes } from "react";
 
-import { NAV_OPTIONS } from "@/components/navigation/options";
 import NavLink from "@/components/navigation/nav-link";
-
+import { NAV_OPTIONS } from "@/components/navigation/options";
 import { cn } from "@/lib/utils";
 
 const Header = ({ ...props }: HTMLAttributes<HTMLElement>) => {

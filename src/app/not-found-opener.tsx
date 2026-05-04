@@ -10,11 +10,7 @@ type StaggeredOpenerProps = {
   topSlug: string;
 };
 
-const StaggeredOpener = ({
-  slugs,
-  stepMs = 200,
-  topSlug,
-}: StaggeredOpenerProps) => {
+const StaggeredOpener = ({ slugs, stepMs = 200, topSlug }: StaggeredOpenerProps) => {
   const { bringToFront, openWindow } = useWindowsActions();
 
   useEffect(() => {

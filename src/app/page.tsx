@@ -1,16 +1,11 @@
 import { InformationSource, SpeechBaloon } from "@/components/icons";
-import {
-  Window,
-  WindowContent,
-  WindowFooter,
-  WindowHeader,
-} from "@/components/windows/window";
+import Footer from "@/components/navigation/footer";
 import Header from "@/components/navigation/header";
 import AboutContent from "@/components/windows/about-content";
 import ContactContent from "@/components/windows/contact-content";
-import Footer from "@/components/navigation/footer";
-import WindowAnimationOverlay from "@/components/windows/window-animation-overlay";
 import WindowsProvider from "@/components/windows/context/windows-provider";
+import { Window, WindowContent, WindowFooter, WindowHeader } from "@/components/windows/window";
+import WindowAnimationOverlay from "@/components/windows/window-animation-overlay";
 import WindowsUrlSync from "@/components/windows/windows-url-sync";
 
 const Page = () => {
@@ -40,10 +35,7 @@ const Page = () => {
           </Window>
 
           <Window className="max-w-85 md:max-w-md" slug="contact">
-            <WindowHeader
-              icon={<SpeechBaloon size={16} strokeWidth={0.3} />}
-              title="Contact"
-            />
+            <WindowHeader icon={<SpeechBaloon size={16} strokeWidth={0.3} />} title="Contact" />
 
             <WindowContent>
               <ContactContent />

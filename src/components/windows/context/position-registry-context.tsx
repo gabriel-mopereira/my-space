@@ -10,8 +10,6 @@ type PositionRegistryContext = {
   unregisterPosition: (slug: string) => void;
 };
 
-const PositionRegistryContext = createContext<PositionRegistryContext | null>(
-  null,
-);
+const PositionRegistryContext = createContext<PositionRegistryContext | null>(null);
 
 export default PositionRegistryContext;

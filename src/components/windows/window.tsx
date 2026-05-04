@@ -1,30 +1,21 @@
 "use client";
 
 import type { ReactNode, RefObject } from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 
-import type { WindowHandlers } from "@/types/windows";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/primitives/button";
 import { TitleBarLines } from "@/components/windows/chrome";
-
 import useIsOpen from "@/hooks/windows/use-is-open";
 import usePosition from "@/hooks/windows/use-position";
 import { useWindowAnimation } from "@/hooks/windows/use-window-animation";
 import useWindowsActions from "@/hooks/windows/use-windows-actions";
 import useZIndex from "@/hooks/windows/use-z-index";
+import { cn } from "@/lib/utils";
 import {
   findVisibleShortcutRect,
   prefersReducedMotion,
 } from "@/lib/windows/resolve-animation-rects";
+import type { WindowHandlers } from "@/types/windows";
 
 type WindowInstanceContext = {
   handlers: WindowHandlers;
@@ -65,8 +56,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
     windowRef,
   });
 
-  const needsOpeningTarget =
-    animation?.direction === "opening" && animation.targetRect === null;
+  const needsOpeningTarget = animation?.direction === "opening" && animation.targetRect === null;
 
   useEffect(() => {
     if (!needsOpeningTarget || !position || !windowRef.current) {
@@ -85,10 +75,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
     bringToFront(slug);
   }, [bringToFront, slug]);
 
-  const value = useMemo(
-    () => ({ handlers, slug, windowRef }),
-    [handlers, slug],
-  );
+  const value = useMemo(() => ({ handlers, slug, windowRef }), [handlers, slug]);
 
   const hiddenForAnimation = animation !== null;
 
@@ -127,9 +114,7 @@ const Window = ({ children, className, slug }: WindowProps) => {
       }}
       tabIndex={-1}
     >
-      <WindowInstanceContext.Provider value={value}>
-        {children}
-      </WindowInstanceContext.Provider>
+      <WindowInstanceContext.Provider value={value}>{children}</WindowInstanceContext.Provider>
     </div>
   );
 };
@@ -187,12 +172,7 @@ type WindowHeaderProps = {
   title?: string;
 };
 
-const WindowHeader = ({
-  className,
-  closeable = true,
-  icon,
-  title,
-}: WindowHeaderProps) => {
+const WindowHeader = ({ className, closeable = true, icon, title }: WindowHeaderProps) => {
   const { handlers, slug } = useWindowInstance();
 
   return (

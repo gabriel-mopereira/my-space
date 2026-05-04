@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 
 import { NAV_OPTIONS } from "@/components/navigation/options";
-
 import useOpenWindowsSnapshot from "@/hooks/windows/use-open-windows-snapshot";
 import useWindowsActions from "@/hooks/windows/use-windows-actions";
 
@@ -12,9 +11,7 @@ const getInitialOpen = (params: Array<string>): Array<string> => {
     return ["about"];
   }
 
-  return params.filter((key) =>
-    NAV_OPTIONS.some((opt) => opt.slug === key && !opt.disabled),
-  );
+  return params.filter((key) => NAV_OPTIONS.some((opt) => opt.slug === key && !opt.disabled));
 };
 
 const WindowsUrlSync = () => {

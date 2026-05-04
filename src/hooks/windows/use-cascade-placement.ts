@@ -3,8 +3,8 @@
 import type { RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import type { Position } from "@/types/windows";
 import calculatePosition from "@/lib/windows/calculate-position";
+import type { Position } from "@/types/windows";
 
 type PositionRegistry = {
   getPositions: () => Map<string, Position>;
@@ -19,12 +19,7 @@ type CascadePlacementParams = {
   windowRef: RefObject<HTMLDivElement | null>;
 };
 
-const useCascadePlacement = ({
-  isOpen,
-  registry,
-  slug,
-  windowRef,
-}: CascadePlacementParams) => {
+const useCascadePlacement = ({ isOpen, registry, slug, windowRef }: CascadePlacementParams) => {
   const { getPositions, registerPosition, unregisterPosition } = registry;
 
   const initialized = useRef(false);
@@ -56,14 +51,7 @@ const useCascadePlacement = ({
       setPosition(null);
       unregisterPosition(slug);
     };
-  }, [
-    isOpen,
-    slug,
-    windowRef,
-    getPositions,
-    registerPosition,
-    unregisterPosition,
-  ]);
+  }, [isOpen, slug, windowRef, getPositions, registerPosition, unregisterPosition]);
 
   return { position, setPosition };
 };

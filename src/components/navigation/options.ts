@@ -1,9 +1,4 @@
-import {
-  Code,
-  SpeechBaloon,
-  InformationSource,
-  PageCurl,
-} from "@/components/icons";
+import { Code, SpeechBaloon, InformationSource, PageCurl } from "@/components/icons";
 
 export const NAV_OPTIONS = [
   {

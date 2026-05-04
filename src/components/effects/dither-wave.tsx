@@ -134,12 +134,7 @@ const FRAGMENT_SHADER = `
   }
 `;
 
-const QUAD_VERTICES = new Float32Array([
-  -1, -1, 0,
-  1, -1, 0,
-  -1, 1, 0,
-  1, 1, 0,
-]);
+const QUAD_VERTICES = new Float32Array([-1, -1, 0, 1, -1, 0, -1, 1, 0, 1, 1, 0]);
 
 const QUALITY_SETTINGS = {
   high: { antialias: true, pixelRatioCap: 3 },
@@ -336,9 +331,7 @@ const DitherWave: React.FC<DitherWaveProps> = ({
       draw((currentTime - startTimeRef.current) * 0.001);
     };
 
-    const reducedMotionQuery = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const startLoop = () => {
       if (rafRef.current) {
@@ -378,10 +371,7 @@ const DitherWave: React.FC<DitherWaveProps> = ({
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      reducedMotionQuery.removeEventListener(
-        "change",
-        handleReducedMotionChange,
-      );
+      reducedMotionQuery.removeEventListener("change", handleReducedMotionChange);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = 0;

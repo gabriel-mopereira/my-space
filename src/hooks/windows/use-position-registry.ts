@@ -8,9 +8,7 @@ const usePositionRegistry = () => {
   const context = useContext(PositionRegistryContext);
 
   if (!context) {
-    throw new Error(
-      "usePositionRegistry must be used within a PositionRegistryProvider",
-    );
+    throw new Error("usePositionRegistry must be used within a PositionRegistryProvider");
   }
 
   return context;

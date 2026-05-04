@@ -1,18 +1,13 @@
-import type { Metadata } from "next";
-import type { ReactNode } from "react";
-
-import {
-  DotGothic16 as dotGothic16,
-  IBM_Plex_Mono as ibmPlexMono,
-} from "next/font/google";
-import localFont from "next/font/local";
+import "@/styles/globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
+import { DotGothic16 as dotGothic16, IBM_Plex_Mono as ibmPlexMono } from "next/font/google";
+import localFont from "next/font/local";
+import type { ReactNode } from "react";
 
 import Background from "@/components/effects/background";
-
-import "@/styles/globals.css";
 
 const chicagoKare = localFont({
   src: [
