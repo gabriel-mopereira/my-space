@@ -7,7 +7,7 @@ const CONTACT_OPTIONS = [
     icon: GitHub,
     label: "GitHub",
     slug: "gitHub",
-    username: "gabriel-mopereira",
+    username: "gabrielmopereira",
   },
   {
     baseUrl: "https://x.com/",
