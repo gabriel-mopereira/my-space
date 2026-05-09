@@ -1,2 +1,5 @@
+allowBuilds:
+  msw: true
+  sharp: true
 onlyBuiltDependencies:
   - msw
