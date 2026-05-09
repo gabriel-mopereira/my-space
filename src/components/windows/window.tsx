@@ -106,9 +106,9 @@ const Window = ({ children, className, slug }: WindowProps) => {
       role="dialog"
       style={{
         display: open ? undefined : "none",
-        ...(position !== null
-          ? { left: position.x, position: "fixed", top: position.y }
-          : { visibility: "hidden" }),
+        ...(position === null
+          ? { visibility: "hidden" }
+          : { left: position.x, position: "fixed", top: position.y }),
         ...(hiddenForAnimation ? { visibility: "hidden" } : null),
         zIndex,
       }}
